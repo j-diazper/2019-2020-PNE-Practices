@@ -29,6 +29,40 @@ def seq_count_base(seq, base):
         if i== base:
             counter+=1
     return(counter)
+def seq_count(seq):
+        i = 0
+        list_of_bases=["A","C","T","G"]
+        value_list=[]
+        counter_A = 0
+        counter_C = 0
+        counter_G = 0
+        counter_T = 0
+        file_contents = Path(seq).read_text()
+        lines = file_contents.split("\n")
+        body = lines[1:]
+        bodystr = " "
+        bodystr = bodystr.join(body).replace(" ", "")
+        for i in bodystr:
+            if i == "A":
+                counter_A += 1
+            elif i == "C":
+                counter_C += 1
+            elif i == "G":
+                counter_G += 1
+            elif i == "T":
+                counter_T += 1
+        value_list.append(counter_A)
+        value_list.append(counter_T)
+        value_list.append(counter_C)
+        value_list.append(counter_G)
+        dict_1= dict(zip(list_of_bases,value_list))
+        return dict_1
+
+
+
+
+
+
 
 
 

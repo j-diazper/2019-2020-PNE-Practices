@@ -14,4 +14,7 @@ BASE_list=["A","C","T","G"]
 for elements in GEN_list:
     FILENAME2= Folder + elements + ".txt"
     for i in BASE_list:
-        print("Gene", elements,"\n", i, seq_count_base(FILENAME2,i))
+        print("Gene", elements,"\n", i,":", seq_count_base(FILENAME2,i))
+for elements in GEN_list:
+    FILENAME2= Folder + elements + ".txt"
+    print("Gene", elements,"\n",seq_count(FILENAME2))
