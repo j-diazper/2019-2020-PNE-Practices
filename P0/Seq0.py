@@ -57,7 +57,15 @@ def seq_count(seq):
         value_list.append(counter_G)
         dict_1= dict(zip(list_of_bases,value_list))
         return dict_1
-
+def seq_reverse(seq):
+    file_contents = Path(seq).read_text()
+    lines = file_contents.split("\n")
+    body = lines[1:]
+    bodystr = " "
+    bodystr = bodystr.join(body).replace(" ","")
+    first20= bodystr[0:20]
+    first20_reversed= first20[::-1]
+    return (first20_reversed)
 
 
 
