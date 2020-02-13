@@ -65,7 +65,7 @@ def seq_reverse(seq):
     bodystr = bodystr.join(body).replace(" ","")
     first20= bodystr[0:20]
     first20_reversed= first20[::-1]
-    return (first20_reversed)
+    return (first20,first20_reversed)
 
 
 
