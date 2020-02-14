@@ -66,6 +66,24 @@ def seq_reverse(seq):
     first20= bodystr[0:20]
     first20_reversed= first20[::-1]
     return (first20,first20_reversed)
+def seq_complement(seq):
+     file_contents = Path(seq).read_text()
+    lines = file_contents.split("\n")
+    body = lines[1:]
+    bodystr = " "
+    bodystr = bodystr.join(body).replace(" ","")
+    first20= bodystr[0:20]
+    for i in first20:
+        if i=="A":
+            i="T"
+        elif i=="T":
+            i="A"
+        elif i=="C":
+            i=="G"
+        elif i=="C":
+            i=="G"
+     return(first20)
+    
 
 
 
