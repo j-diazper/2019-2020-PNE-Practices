@@ -88,7 +88,10 @@ def seq_complement(seq):
             i=="G"
             complements=coomplements + i
      return(first20,complements)
-    
+  def processing_genes(seq):
+        dict_value= seq_count(seq)
+        max_val= max(dict_value, key= dict_value.get)
+        return max_val
 
 
 
