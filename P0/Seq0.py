@@ -1,3 +1,4 @@
+from pathlib import Path
 def seq_read_fasta(filename):
     file_contents = Path(filename).read_text()
     lines = file_contents.split("\n")
