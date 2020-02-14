@@ -1,8 +1,3 @@
-from pathlib import Path
-
-list=[]
-def seq_ping():
-    print("Ok")
 def seq_read_fasta(filename):
     file_contents = Path(filename).read_text()
     lines = file_contents.split("\n")
@@ -92,5 +87,3 @@ def processing_genes(seq):
         dict_value= seq_count(seq)
         max_val= max(dict_value, key= dict_value.get)
         return max_val
-
-
