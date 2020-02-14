@@ -73,16 +73,21 @@ def seq_complement(seq):
     bodystr = " "
     bodystr = bodystr.join(body).replace(" ","")
     first20= bodystr[0:20]
+    complements=""
     for i in first20:
         if i=="A":
             i="T"
+            complements=coomplements + i
         elif i=="T":
             i="A"
+            complements=coomplements + i
         elif i=="C":
             i=="G"
+            complements=coomplements + i
         elif i=="C":
             i=="G"
-     return(first20)
+            complements=coomplements + i
+     return(first20,complements)
     
 
 
