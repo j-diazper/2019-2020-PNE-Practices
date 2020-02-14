@@ -57,12 +57,40 @@ def seq_count(seq):
         value_list.append(counter_G)
         dict_1= dict(zip(list_of_bases,value_list))
         return dict_1
-
-
-
-
-
-
-
+def seq_reverse(seq):
+    file_contents = Path(seq).read_text()
+    lines = file_contents.split("\n")
+    body = lines[1:]
+    bodystr = " "
+    bodystr = bodystr.join(body).replace(" ","")
+    first20= bodystr[0:20]
+    first20_reversed= first20[::-1]
+    return (first20,first20_reversed)
+def seq_complement(seq):
+    file_contents = Path(seq).read_text()
+    lines = file_contents.split("\n")
+    body = lines[1:]
+    bodystr = " "
+    bodystr = bodystr.join(body).replace(" ","")
+    first20= bodystr[0:20]
+    complements=""
+    for i in first20:
+        if i=="A":
+            i="T"
+            complements=complements + i
+        elif i=="T":
+            i="A"
+            complements=complements + i
+        elif i=="C":
+            i=="G"
+            complements=complements + i
+        elif i=="G":
+            i=="C"
+            complements=complements + i
+    return(first20,complements)
+def processing_genes(seq):
+        dict_value= seq_count(seq)
+        max_val= max(dict_value, key= dict_value.get)
+        return max_val
 
 
