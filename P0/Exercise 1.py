@@ -19,3 +19,7 @@ for elements in GEN_list:
     FILENAME2= Folder + elements + ".txt"
     print("Gene", elements,"\n",seq_count(FILENAME2))
 print("DNA_file: ","\n","Frag: ", seq_reverse(FILENAME1)[0],"\n","Rev: ", seq_reverse(FILENAME1)[1])
+print("DNA_file: ","\n","Frag: ", seq_complement(FILENAME1)[0],"\n","Comp: ", seq_complement(FILENAME1)[1])
+
+
+
