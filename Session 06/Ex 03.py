@@ -25,14 +25,15 @@ def generate_seqs(pattern, number):
     for i in range(1, number + 1):
         base = i*pattern
         new_list.append(base)
-    return (",".join(new_list))
-
-
+    return new_list
 
 seq_list1 = generate_seqs("A", 3)
 seq_list2 = generate_seqs("AC", 5)
 
 print("List 1:")
-print(seq_list1)
+for i in seq_list1:
+    print(f"Sequence: {seq_list1.index(i)} (Length: {len(i)}) {i}")
 print("List 2:")
-print(seq_list2)
+for i in seq_list2:
+    print(f"Sequence: {seq_list2.index(i)} (Length: {len(i)}) {i}")
+
