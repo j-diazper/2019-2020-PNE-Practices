@@ -20,8 +20,15 @@ class Seq:
     pass
 
 def generate_seqs(pattern, number):
-    new_list= pattern * number
-    return new_list
+    new_list = []
+    base = ""
+    for i in range(1, number + 1):
+        base = i*pattern
+        new_list.append(base)
+    return (",".join(new_list))
+
+
+
 seq_list1 = generate_seqs("A", 3)
 seq_list2 = generate_seqs("AC", 5)
 
