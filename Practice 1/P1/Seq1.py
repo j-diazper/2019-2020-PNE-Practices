@@ -1,3 +1,4 @@
+from pathlib import Path
 class Seq:
     """"A  class for representing seq object"""
     def __init__(self,strbases=None):
@@ -26,6 +27,18 @@ class Seq:
             return 0
         else:
             return len(self.strbases)
+
+    def count_base(self, base):
+        count = 0
+        if self.strbases == "ERROR":
+            return "0"
+        elif self.strbases == "NULL":
+            return "0"
+        else:
+            for element in self.strbases:
+                if element == base:
+                    count = count + 1
+        return count
     def count(self,base):
         i = 0
         list_of_bases = ["A", "C", "T", "G"]
@@ -88,5 +101,15 @@ class Seq:
                     i == "C"
                     complements = complements + i
         return (complements)
+
+    def read_fasta(self, filename):
+        bodystr = ""
+        file_contents = Path(filename).read_text()
+        lines = file_contents.split('\n')
+        body = lines[1:]
+        bodystr = bodystr.join(body).replace(" ", "")
+        return (bodystr)
+
+    pass
     pass
 
