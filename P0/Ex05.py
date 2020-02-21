@@ -3,4 +3,4 @@ Folder= "/home/alumnos/jdiazper/PycharmProjects/2019-2020-PNE-Practices/Session 
 GEN_list=["U5","ADA", "FRAT1", "FXN","U5"]
 for elements in GEN_list:
     FILENAME2= Folder + elements + ".txt"
-    print("Gene", elements,"\n",seq_count(FILENAME2))
+    print("Gene",elements,"\n",seq_count(FILENAME2))

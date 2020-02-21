@@ -110,6 +110,9 @@ class Seq:
         bodystr = bodystr.join(body).replace(" ", "")
         return (bodystr)
 
-    pass
+    def processing_genes(self,baselist):
+        dict_value = self.count(baselist)
+        max_val = max(dict_value, key=dict_value.get)
+        return max_val
     pass
 
