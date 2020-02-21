@@ -1,6 +1,6 @@
 from Seq1 import Seq
 Folder = r"C:\Users\jesus.diaz\PycharmProjects\2019-2020-PNE-Practices\Practice 1\P1\\"
-GEN_list=["U5","ADA", "FRAT1", "FXN","U5"]
+GEN_list=["U5","ADA", "FRAT1", "FXN","RNU6_269P"]
 baselist=["A","C","G","T"]
 txt=".txt"
 for elements in GEN_list:
