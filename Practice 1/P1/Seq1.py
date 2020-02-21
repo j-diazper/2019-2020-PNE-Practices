@@ -1,3 +1,4 @@
+from pathlib import Path
 class Seq:
     """"A  class for representing seq object"""
     def __init__(self,strbases=None):
@@ -11,7 +12,6 @@ class Seq:
             for i in strbases:
                 if i not in gen_list:
                     can_continue="False"
-
                 elif i in gen_list:
                     can_continue="True"
             if can_continue == "True":
@@ -88,5 +88,13 @@ class Seq:
                     i == "C"
                     complements = complements + i
         return (complements)
+
+    def read_fasta(self):
+        lines= self.strbases\
+        body = lines[1:]
+        bodystr = " "
+        bodystr = bodystr.join(body).replace(" ", "")
+        return bodystr
+
     pass
 
