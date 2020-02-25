@@ -1,0 +1,4 @@
+Machine     Interface       Date        Place       IP
+Mobile      Wifi            25/02/2020  Alcorcón    10.3.33.118
+Computer    Wire            25/02/2020  Alcorcón    212.128.253.170
+Mobile      Wifi            25/02/2020  Home

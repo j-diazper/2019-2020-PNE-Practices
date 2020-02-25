@@ -40,8 +40,7 @@ class Seq:
                     count = count + 1
         return count
     def count(self,base):
-        i = 0
-        list_of_bases = ["A", "C", "T", "G"]
+        list_of_bases = ["A", "C", "G", "T"]
         value_list=[]
         counter_A = 0
         counter_C = 0
@@ -54,8 +53,8 @@ class Seq:
                 counter_G = 0
                 counter_T = 0
                 value_list.append(counter_A)
-                value_list.append(counter_T)
                 value_list.append(counter_C)
+                value_list.append(counter_T)
                 value_list.append(counter_G)
                 dict_1 = dict(zip(list_of_bases, value_list))
                 return dict_1
@@ -71,9 +70,9 @@ class Seq:
                     elif i == "T":
                         counter_T += 1
                 value_list.append(counter_A)
-                value_list.append(counter_T)
                 value_list.append(counter_C)
                 value_list.append(counter_G)
+                value_list.append(counter_T)
                 dict_1 = dict(zip(list_of_bases, value_list))
                 return dict_1
     def reverse(self):
