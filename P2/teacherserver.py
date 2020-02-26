@@ -1,27 +1,7 @@
-IP ="212.128.253.170"
-Ping_self = """PING 212.128.253.170 (212.128.253.170) 56(84) bytes of data.
-64 bytes from 212.128.253.170: icmp_seq=1 ttl=64 time=0.056 ms
-64 bytes from 212.128.253.170: icmp_seq=2 ttl=64 time=0.050 ms
-64 bytes from 212.128.253.170: icmp_seq=3 ttl=64 time=0.064 ms
-64 bytes from 212.128.253.170: icmp_seq=4 ttl=64 time=0.063 ms"""
-
-Ping_8_8_8_8 = """PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
-64 bytes from 8.8.8.8: icmp_seq=1 ttl=55 time=3.94 ms
-64 bytes from 8.8.8.8: icmp_seq=2 ttl=55 time=3.93 ms
-64 bytes from 8.8.8.8: icmp_seq=3 ttl=55 time=4.14 ms
-64 bytes from 8.8.8.8: icmp_seq=4 ttl=55 time=3.97 ms
-64 bytes from 8.8.8.8: icmp_seq=5 ttl=55 time=3.94 ms
-64 bytes from 8.8.8.8: icmp_seq=6 ttl=55 time=4.28 ms
-64 bytes from 8.8.8.8: icmp_seq=7 ttl=55 time=3.94 ms"""
-Ping_URJC ="""PING urjc.es (192.168.46.45) 56(84) bytes of data.
-64 bytes from cuadrado.urjc.es (192.168.46.45): icmp_seq=1 ttl=126 time=2.32 ms
-64 bytes from cuadrado.urjc.es (192.168.46.45): icmp_seq=2 ttl=126 time=2.52 ms
-64 bytes from cuadrado.urjc.es (192.168.46.45): icmp_seq=3 ttl=126 time=2.33 ms
-64 bytes from cuadrado.urjc.es (192.168.46.45): icmp_seq=4 ttl=126 time=3.37 ms"""
 import socket
 
 # Configure the Server's IP and PORT
-PORT = 8080
+PORT = 8089
 IP = "212.128.253.170"
 MAX_OPEN_REQUESTS = 5
 

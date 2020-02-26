@@ -6,7 +6,7 @@ IP = "212.128.253.128"
 
 
 # -- Ask the user for the message
-message=("BAJA WACHO BAJAAAAAA")
+message=("")
 
 # -- Create the socket
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
