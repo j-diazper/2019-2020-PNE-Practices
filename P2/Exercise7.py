@@ -1,4 +1,4 @@
-from typing import List
+
 
 from Client0 import Client
 from pathlib import Path
@@ -10,7 +10,7 @@ def dividing_seq(FILENAME):
     body = lines[1:]
     bodystr=bodystr.join(body).replace(",","")
     split_strings = []
-    n = 10
+    n = 9
     for index in range(0, len(bodystr), n):
         split_strings.append(bodystr[index: index + n])
     return bodystr,split_strings
@@ -24,7 +24,7 @@ print(f"-----| Practice {PRACTICE}, Exercise {EXERCISE} |------")
 # -- Parameters of the server to talk to
 IP = "212.128.253.170"
 PORT1 = 8080
-PORT2=8087
+PORT2=8089
 PORT_list=[]
 PORT_list.append(PORT1)
 PORT_list.append(PORT2)
@@ -53,5 +53,9 @@ print("From server: ", c1.debug_talk(response))
 print("From server: ", c2.debug_talk(response))
 for i in EVEN_list:
     print("From server: ",c1.debug_talk(i))
-for i in EVEN_list:
+    if EVEN_list.index(i)==4:
+        break
+for i in ODD_list:
     print("From server: ",c2.debug_talk(i))
+    if ODD_list.index(i)==4:
+        break
