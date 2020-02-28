@@ -1,6 +1,19 @@
+from typing import List
+
 from Client0 import Client
 from pathlib import Path
-from Exercise6 import dividing_seq
+
+def dividing_seq(FILENAME):
+    bodystr=""
+    file_contents = Path(FILENAME).read_text()
+    lines = file_contents.split("\n")
+    body = lines[1:]
+    bodystr=bodystr.join(body).replace(",","")
+    split_strings = []
+    n = 10
+    for index in range(0, len(bodystr), n):
+        split_strings.append(bodystr[index: index + n])
+    return bodystr,split_strings
 
 
 PRACTICE = 2
@@ -26,7 +39,7 @@ FILENAME = "FRAT1.txt"
 EVEN_list=[]
 ODD_list= []
 for i in dividing_seq(FILENAME)[1]:
-    if dividing_seq(FILENAME)[1].index(i)//2==0:
+    if dividing_seq(FILENAME)[1].index(i)%2==0:
         EVEN_list.append(i)
     else:
         ODD_list.append(i)
