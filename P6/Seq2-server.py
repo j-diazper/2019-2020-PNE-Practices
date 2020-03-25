@@ -17,7 +17,7 @@ SEQ_GET = [
     "AGCGCAAACGCTAAAAACCGGTTGAGTTGACGCACGGAGAGAAGGGGTGTGTGGGTGGGT",
 ]
 
-FOLDER = r"C:\Users\jesus.diaz\PycharmProjects\2019-2020-PNE-Practices\Practice 1\P1\ "
+FOLDER = r"C:\Users\jesus.diaz\PycharmProjects\2019-2020-PNE-Practices\P6"
 EXT = ".txt"
 
 
@@ -105,8 +105,8 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             name, gene = pairs[0].split("=")
 
             s = Seq()
-            FILENAME= FOLDER + gene + EXT
-            FILENAME.replace(" ","")
+            FILENAME= FOLDER + "\\" + gene + EXT
+
             s.read_fasta(FILENAME)
             gene_str = str(s)
             # -- Generate the html code
