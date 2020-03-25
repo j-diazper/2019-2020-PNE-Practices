@@ -32,7 +32,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         print(self.requestline)
 
         # Analize the request line
-        req_line = self.requestline.split('\n')
+        req_line = self.requestline.split(' ')
 
         # Get the path. It always start with the / symbol
         path = req_line[1]
