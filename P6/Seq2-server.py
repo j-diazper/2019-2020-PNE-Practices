@@ -106,9 +106,8 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
             s = Seq()
             FILENAME= FOLDER + "\\" + gene + EXT
-
-            s.read_fasta(FILENAME)
-            gene_str = str(s)
+            s1= Seq(s.read_fasta(FILENAME))
+            gene_str = str(s1)
             # -- Generate the html code
             contents = f"""
                                 <!DOCTYPE html>
