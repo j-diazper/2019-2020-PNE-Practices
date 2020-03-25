@@ -2,7 +2,7 @@ import http.server
 import socketserver
 from pathlib import Path
 from Seq1 import Seq
-FOLDER = r"C:\Users\jesus.diaz\PycharmProjects\2019-2020-PNE-Practices\P4\P4"
+
 
 # Define the Server's port
 PORT = 8080
@@ -17,7 +17,7 @@ SEQ_GET = [
     "AGCGCAAACGCTAAAAACCGGTTGAGTTGACGCACGGAGAGAAGGGGTGTGTGGGTGGGT",
 ]
 
-
+FOLDER = r"C:\Users\jesus.diaz\PycharmProjects\2019-2020-PNE-Practices\Practice 1\P1\"
 EXT = ".txt"
 
 
