@@ -44,60 +44,60 @@ for name in GENES:
     except ConnectionRefusedError:
         print("ERROR! Cannot connect to the Server")
         exit()
-# -- Read the response message from the server
-r1 = conn.getresponse()
+    # -- Read the response message from the server
+    r1 = conn.getresponse()
 
-# -- Print the status line
-print("Response received!:", r1.status, r1.reason,"\n")
+    # -- Print the status line
+    print("Response received!:", r1.status, r1.reason,"\n")
 
-# -- Read the response's body
-data1 = r1.read().decode()
+    # -- Read the response's body
+    data1 = r1.read().decode()
 
-# -- Create a variable with the data,
-# -- form the JSON received
-gene = json.loads(data1)
+    # -- Create a variable with the data,
+    # -- form the JSON received
+    gene = json.loads(data1)
 
-print("Gene", end="")
-print(":", name)
-print("Description", end="")
-print(":", gene['desc'])
+    print("Gene", end="")
+    print(":", name)
+    print("Description", end="")
+    print(":", gene['desc'])
 
-genestr = gene['seq']
+    genestr = gene['seq']
 
-# -- Create the object sequence from the string
-s = Seq(genestr)
+    # -- Create the object sequence from the string
+    s = Seq(genestr)
 
-sl = s.len()
-ca = s.count_base('A')
-pa = "{:.1f}".format(100 * ca / sl)
-cc = s.count_base('C')
-pc = "{:.1f}".format(100 * cc / sl)
-cg = s.count_base('G')
-pg = "{:.1f}".format(100 * cg / sl)
-ct = s.count_base('T')
-pt = "{:.1f}".format(100 * ct / sl)
+    sl = s.len()
+    ca = s.count_base('A')
+    pa = "{:.1f}".format(100 * ca / sl)
+    cc = s.count_base('C')
+    pc = "{:.1f}".format(100 * cc / sl)
+    cg = s.count_base('G')
+    pg = "{:.1f}".format(100 * cg / sl)
+    ct = s.count_base('T')
+    pt = "{:.1f}".format(100 * ct / sl)
 
-print("Total lengh", end="")
-print(":", sl)
+    print("Total lengh", end="")
+    print(":", sl)
 
-print("A", end="")
-print(":", ca, pa,"%")
-print("C", end="")
-print(":", cc, pc,"%")
-print("G", end="")
-print(":", cg, pg,"%")
-print("T", end="")
-print(":", ct, pt, "%")
+    print("A", end="")
+    print(":", ca, pa,"%")
+    print("C", end="")
+    print(":", cc, pc,"%")
+    print("G", end="")
+    print(":", cg, pg,"%")
+    print("T", end="")
+    print(":", ct, pt, "%")
 
-# -- Dictionary with the values
-d = s.count(BASES)
+    # -- Dictionary with the values
+    d = s.count(BASES)
 
-# -- Create a list with all the values
-ll = list(d.values())
+    # -- Create a list with all the values
+    ll = list(d.values())
 
-# -- Calculate the maximum
-m = max(ll)
+    # -- Calculate the maximum
+    m = max(ll)
 
-# -- Print the base
-print("Most frequent Base", end="")
-print(f": {BASES[ll.index(m)]}")
+    # -- Print the base
+    print("Most frequent Base", end="")
+    print(f": {BASES[ll.index(m)]}")
