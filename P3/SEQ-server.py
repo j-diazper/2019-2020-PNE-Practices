@@ -1,147 +1,191 @@
-IP = "192.168.1.213"
-PORT = 8080
-from Seq1 import Seq
+
 import socket
-# -- Sequences for the GET command
-GET_OPTIONS = [
-    "ACCTCCTCTCCAGCAATGCCAACCCCAGTCCAGGCCCCCATCCGCCCAGGATCTCGATCA",
-    "AAAAACATTAATCTGTGGCCTTTCTTTGCCATTTCCAACTCTGCCACCTCCATCGAACGA",
-    "CAAGGTCCCCTTCTTCCTTTCCATTCCCGTCAGCTTCATTTCCCTAATCTCCGTACAAAT",
-    "CCCTAGCCTGACTCCCTTTCCTTTCCATCCTCACCAGACGCCCGCATGCCGGACCTCAAA",
-    "AGCGCAAACGCTAAAAACCGGTTGAGTTGACGCACGGAGAGAAGGGGTGTGTGGGTGGGT",
-]
+from Seq1 import Seq
 
-FOLDER = r"C:\Users\jesus.diaz\PycharmProjects\2019-2020-PNE-Practices\Practice 1\P1"
-EXT = ".txt"
-GENES = [r"\U5", "\ADA", "\FRAT1", "\FXN", "\RNU6_269P"]
+# ----------- Functions:
 
+def ping():
+    response = "OK!\n"
+    print(response)
+    # We send to the client the OK! response:
+    return cs.send(str.encode(response))
 
-def get_cmd(n):
-    """GET command
-    returns: a sequence
-    """
-    return GET_OPTIONS[n]
+def get(n):
+    seqlist = ["ACCTCCTCTCCAGCAATGCCAACCCCAGTCCAGGCCCCCATCCGCCCAGGATCTCGATCA", "AAAAACATTAATCTGTGGCCTTTCTTTGCCATTTCCAACTCTGCCACCTCCATCGAACGA", "CAAGGTCCCCTTCTTCCTTTCCATTCCCGTCAGCTTCATTTCCCTAATCTCCGTACAAAT", "CCCTAGCCTGACTCCCTTTCCTTTCCATCCTCACCAGACGCCCGCATGCCGGACCTCAAA", "AGCGCAAACGCTAAAAACCGGTTGAGTTGACGCACGGAGAGAAGGGGTGTGTGGGTGGGT"]
+    # We print all the sequences of the list:
+    for sequence in seqlist:
+        print(f"GET {seqlist.index(sequence)}: {sequence}")
+    # Given the number of the sequence, we respond with that sequence:
+    for sequence in seqlist:
+        return seqlist[n]
 
+def info(seq):
+    # In this function, we return, in order, as a tuple:
+    # the sequence, its length, the counter of each of its bases and its base percentage conformation.
 
-def info_cmd(strseq):
-    """INFO seq
-    returns: The string with the information
-    """
-    # -- Create the object sequence from the string
-    s = Seq(strseq)
-    sl = s.len()
-    ca = s.count_base('A')
-    pa = "{:.1f}".format(100 * ca / sl)
-    cc = s.count_base('C')
-    pc = "{:.1f}".format(100 * cc / sl)
-    cg = s.count_base('G')
-    pg = "{:.1f}".format(100 * cg / sl)
-    ct = s.count_base('T')
-    pt = "{:.1f}".format(100 * ct / sl)
+    # Length of the sequence:
+    seqlen = len(seq)
 
-    resp = f"""Sequence: {s}
-Total length: {sl}
-A: {ca} ({pa}%)
-C: {cc} ({pc}%)
-G: {cg} ({pg}%)
-T: {ct} ({pt}%)"""
-    return resp
+    # Number of each of its bases:
+    countA = 0
+    countC = 0
+    countG = 0
+    countT = 0
+    countlist = []
+    for i in seq:
+        if i == "A":
+            countA = countA + 1
+        elif i == "C":
+            countC = countC + 1
+        elif i == "G":
+            countG = countG + 1
+        elif i == "T":
+            countT = countT + 1
+        else:
+            next
+    # Now, we append each counter to the list of counters:
+    countlist.append(countA)
+    countlist.append(countC)
+    countlist.append(countG)
+    countlist.append(countT)
 
+    # Percentage base conformation:
+    percentlist = []
+    for count in countlist:
+        percentage = (count / seqlen) * 100
+        percentage = round(percentage, 2)
+        percentlist.append(percentage)
 
-def comp_cmd(strseq):
-    # -- Create the object sequence from the string
-    s = Seq(strseq)
-    return s.complement()
-
-
-def rev_cmd(strseq):
-    # -- Create the object sequence from the string
-    s = Seq(strseq)
-    return s.reverse()
-
-
-def gene_cmd(name):
-    s = Seq()
-    s.read_fasta(FOLDER + name + EXT)
-    return str(s)
+    # Finally, we return a tuple of 4 elements:
+    # sequence, sequence length, base count list and base percentage list.
+    return (seq, seqlen, countlist, percentlist)
 
 
-# ------ Configure the server
-# -- Listening socket
+
+
+
+# ---------- SERVER:
+
+
+
+# Configure the Server's IP and PORT
+PORT = 8080
+IP = "192.168.1.213"
+
+# Create the socket
 ls = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-# -- Optional: This is for avoiding the problem of Port already in use
+# Optional: This is for avoiding the problem of Port already in use
 ls.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
-# -- Setup up the socket's IP and PORT
+# Bind the socket to server's IP and PORT
 ls.bind((IP, PORT))
 
-# -- Become a listening socket
+# Configure the socket for listening
 ls.listen()
 
-print("SEQ Server configured!")
+print("SEQ server configured!")
 
-# --- MAIN LOOP
+
+client_ip_list = []
+nc = 0
+
 while True:
-    print("Waiting for clients....")
+
+    # -- Waits for a client to connect
+    print("Waiting for clients...")
+
     try:
         (cs, client_ip_port) = ls.accept()
+
+    # -- Server stopped manually
     except KeyboardInterrupt:
-        print("Server Stopped!")
+        print("Server stopped by the user")
+
+        # -- Close the listenning socket
         ls.close()
+
+        # -- Exit!
         exit()
+
+    # -- Execute this part if there are no errors
+
     else:
+        nc += 1
+        client_ip_list.append(f'Client{nc}:{client_ip_port}')
+        print("CONNECTION: {} From the IP: {}".format(nc, client_ip_port))
 
-        # -- Receive the request message
-        req_raw = cs.recv(2000)
-        req = req_raw.decode()
+        # -- Read the message from the client
+        # -- The received message is in raw bytes
+        msg_raw = cs.recv(2048)
 
-        # ------ Process the command
-        # -- Remove the \n
-        lines = req.split("\n")
-        line0 = lines[0].strip()
+        # -- We decode it for converting it
+        # -- into a human-redeable string
+        msg = msg_raw.decode()
 
-        # -- Separate the line into command an argument
-        # -- Eliminate the blank spaces
-        lcmds = line0.split(' ')
-
-        # -- The first element is the command
-        cmd = lcmds[0]
-
-        # -- Get the first argument
-        try:
-            arg = lcmds[1]
-        except IndexError:
-            # -- No arguments
-            arg = ""
-
-        # -- Response message
-        response = ""
-
-        if cmd == "PING":
+        if msg == "PING":
             print("PING command!")
-            response = "OK!"
-        elif cmd == "GET":
-            print("GET")
-            response = get_cmd(int(arg))
-        elif cmd == "INFO":
-            print("INFO")
-            response = info_cmd(arg)
-        elif cmd == "COMP":
-            print("COMP")
-            response = comp_cmd(arg)
-        elif cmd == "REV":
-            print("REV")
-            response = rev_cmd(arg)
-        elif cmd == "GENE":
-            print("GENE")
-            response = gene_cmd(arg)
-        else:
-            print("Unknown command!!!", 'red')
-            response = "Unkwnown command"
+            # -- Send a response message to the client
+            ping()
+            cs.close()
 
-        # -- Send the response message
-        response += '\n'
-        print(response)
-        cs.send(response.encode())
-        cs.close()
+        # The server recognises the GET command in the message and the number of the sequence:
+        elif msg.split(" ")[0] == "GET":
+            number = int(msg.split(" ")[1])
+            response = f"GET {number}\n{str(get(number))}"
+            cs.send(response.encode())
+            cs.close()
+
+        # The server recognises the INFO command in the message and the sequence:
+        elif msg.split(" ")[0] == "INFO":
+            seq = msg.split(" ")[1]
+            #We extract all the elements of the tuple given by the info() function and then...
+            seqlen = info(seq)[1]
+            countlist = info(seq)[2]
+            percentlist = info(seq)[3]
+            #We obtain the info of the sequence:
+            response = f"Sequence: {seq}\nTotal length: {seqlen}\nA: {countlist[0]} ({percentlist[0]}%)\nC: {countlist[1]} ({percentlist[1]}%)\nG: {countlist[2]} ({percentlist[2]}%)\nT: {countlist[3]} ({percentlist[3]}%)\n"
+            cs.send(response.encode())
+            cs.close()
+
+        # The server recognises the COMP command in the message and the sequence:
+        elif msg.split(" ")[0] == "COMP":
+            seq = msg.split(" ")[1]
+            s = Seq(seq)
+            comp = s.complement()
+            response = f"COMP {seq}\n{comp}"
+            cs.send(response.encode())
+            cs.close()
+
+        # The server recognises the COMP command in the message and the sequence:
+        elif msg.split(" ")[0] == "REV":
+            seq = msg.split(" ")[1]
+            s = Seq(seq)
+            rev = s.reverse()
+            response = f"REV {seq}\n{rev}"
+            cs.send(response.encode())
+            cs.close()
+
+        # The server recognises the GENE command in the message and the name of the gene (the filename):
+        elif msg.split(" ")[0] == "GENE":
+            filename = msg.split(" ")[1]
+            doclist = [r'\U5', '\ADA', '\FRAT1', '\FXN', '\RNU6_269P']
+            FOLDER =r"C:\Users\jesus.diaz\PycharmProjects\2019-2020-PNE-Practices\Practice 1\P1"
+            # We check if the given message is in the list of gene documents:
+            for element in doclist:
+                if filename == element:
+                    # We create the entire filename:
+                    dnafile = FOLDER + filename + ".txt"
+                    s = Seq()
+                    # We obtain the body of the document as a string:
+                    s1 = Seq(s.read_fasta(dnafile))
+            response = f"{msg}\n{s1}"
+            cs.send(response.encode())
+            cs.close()
+
+        elif msg == "EXIT":
+            print(f'The following clients have sended a message to the server:')
+            for i in client_ip_list:
+                print(i)
+            ls.close()
+            exit()

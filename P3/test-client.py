@@ -45,7 +45,7 @@ print(c.talk(cmd))
 
 # -- Test 6: GENE
 print("* Testing GENE...")
-for gene in ["U5", "ADA", "FRAT1", "FXN", "RNU6_269P"]:
+for gene in [r"\U5", "\ADA", "\FRAT1", "\FXN", "\RNU6_269P"]:
     cmd = f"GENE {gene}"
     print(cmd)
     print(c.talk(cmd))
