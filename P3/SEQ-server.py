@@ -13,7 +13,7 @@ SEQ_GET = [
     "AGCGCAAACGCTAAAAACCGGTTGAGTTGACGCACGGAGAGAAGGGGTGTGTGGGTGGGT",
 ]
 
-FOLDER = r"C:\Users\jesus.diaz\PycharmProjects\2019-2020-PNE-Practices\P1"
+FOLDER = r"C:\Users\jesus.diaz\PycharmProjects\2019-2020-PNE-Practices\Practice 1\P1"
 EXT = ".txt"
 GENES = ["U5", "ADA", "FRAT1", "FXN", "RNU6_269P"]
 
@@ -64,8 +64,7 @@ def rev_cmd(strseq):
 
 def gene_cmd(name):
     s = Seq()
-    name= r"\"" + name
-    s.read_fasta(FOLDER + name + EXT)
+    s.read_fasta(FOLDER + "\\" + name + EXT)
     return str(s)
 
 

@@ -1,5 +1,5 @@
 from Client0 import Client
-from Seq1 import Seq
+
 
 PRACTICE = 3
 EXERCISE = 7
@@ -7,7 +7,7 @@ EXERCISE = 7
 print(f"-----| Practice {PRACTICE}, Exercise {EXERCISE} |------")
 
 # -- Parameters of the server to talk to
-IP = "192.168.1.213"
+IP = "127.0.0.1"
 PORT = 8080
 
 # -- Cofigure the client
@@ -46,7 +46,7 @@ print(c.talk(cmd))
 
 # -- Test 6: GENE
 print("* Testing GENE...")
-for gene in [r"\U5", "\ADA", "\FRAT1", "\FXN", "\RNU6_269P"]:
+for gene in ["U5", "ADA", "FRAT1", "FXN", "RNU6_269P"]:
     cmd = f"GENE {gene}"
     print(cmd)
     print(c.talk(cmd))
