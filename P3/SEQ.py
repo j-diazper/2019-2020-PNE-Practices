@@ -13,7 +13,7 @@ SEQ_GET = [
     "AGCGCAAACGCTAAAAACCGGTTGAGTTGACGCACGGAGAGAAGGGGTGTGTGGGTGGGT",
 ]
 
-FOLDER = r"C:\Users\jesus.diaz\PycharmProjects\2019-2020-PNE-Practices\P1"
+FOLDER = "../Session-04/"
 EXT = ".txt"
 GENES = ["U5", "ADA", "FRAT1", "FXN", "RNU6_269P"]
 
@@ -64,7 +64,6 @@ def rev_cmd(strseq):
 
 def gene_cmd(name):
     s = Seq()
-    name= r"\"" + name
     s.read_fasta(FOLDER + name + EXT)
     return str(s)
 
@@ -122,25 +121,25 @@ while True:
         response = ""
 
         if cmd == "PING":
-            print("PING command!")
+            print("PING command!", 'green')
             response = "OK!"
         elif cmd == "GET":
-            print("GET")
+            print("GET", 'green')
             response = get_cmd(int(arg))
         elif cmd == "INFO":
-            print("INFO")
+            print("INFO", 'green')
             response = info_cmd(arg)
         elif cmd == "COMP":
-            print("COMP")
+            print("COMP", 'green')
             response = comp_cmd(arg)
         elif cmd == "REV":
-            print("REV")
+            print("REV", 'green')
             response = rev_cmd(arg)
         elif cmd == "GENE":
-            print("GENE")
+            print("GENE", 'green')
             response = gene_cmd(arg)
         else:
-            print("Unknown command!!!")
+            print("Unknown command!!!", 'red')
             response = "Unkwnown command"
 
         # -- Send the response message
