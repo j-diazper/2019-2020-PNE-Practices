@@ -34,13 +34,13 @@ comand = f"COMP {seq}"
 print(comand)
 print(c.talk(comand))
 
-# -- Test 5: REV
+# Test REV
 print("* Testing REV...")
 cmd = f"REV {seq}"
 print(comand)
 print(c.talk(comand))
 
-# -- Test 6: GENE
+# Test GENE
 print("* Testing GENE...")
 for gene in GENE_LIST:
     comand = f"GENE {gene}"
