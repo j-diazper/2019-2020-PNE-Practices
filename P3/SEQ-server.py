@@ -5,7 +5,7 @@ IP = "127.0.0.1"
 PORT = 8080
 
 # -- Sequences for the GET command
-SEQ_GET = [
+SEQ_LIST = [
     "ACCTCCTCTCCAGCAATGCCAACCCCAGTCCAGGCCCCCATCCGCCCAGGATCTCGATCA",
     "AAAAACATTAATCTGTGGCCTTTCTTTGCCATTTCCAACTCTGCCACCTCCATCGAACGA",
     "CAAGGTCCCCTTCTTCCTTTCCATTCCCGTCAGCTTCATTTCCCTAATCTCCGTACAAAT",
@@ -17,54 +17,42 @@ FOLDER = r"C:\\Users\\jesus.diaz\\PycharmProjects\\2019-2020-PNE-Practices\\Prac
 EXT = ".txt"
 GENES = ["U5", "ADA", "FRAT1", "FXN", "RNU6_269P"]
 
+# GET option returns a sequence associated with the number introduced
+def GET(SEQ_Index):
+    return SEQ_LIST[SEQ_Index]
 
-def get_cmd(n):
-    """GET command
-    returns: a sequence
-    """
-    return SEQ_GET[n]
+# INFO option returns the info associated with a sequence
+def INFO(SEQ):
+    # First convert the string into an object Seq, the using th class functions calculate the info with count_base and len
+    s = Seq(SEQ)
+    length = s.len()
+    counter_A = s.count_base('A')
+    perc_A = (100 * counter_A / length)
+    counter_C = s.count_base('C')
+    perc_C = (100 * counter_C / length)
+    counter_G = s.count_base('G')
+    perc_G = (100 * counter_G / length)
+    counter_T = s.count_base('T')
+    perc_T = (100 * counter_T / length)
+    INFO = f"Sequence: {s},\n,Total length: {length},A: {counter_A} ({perc_A}%),\n,C: {counter_C} ({perc_C}%),\n,G: {counter_G} ({perc_G}%),\n,T: {counter_T} ({perc_T}%)"
+    return INFO
 
-
-def info_cmd(strseq):
-    """INFO seq
-    returns: The string with the information
-    """
-    # -- Create the object sequence from the string
-    s = Seq(strseq)
-    sl = s.len()
-    ca = s.count_base('A')
-    pa = "{:.1f}".format(100 * ca / sl)
-    cc = s.count_base('C')
-    pc = "{:.1f}".format(100 * cc / sl)
-    cg = s.count_base('G')
-    pg = "{:.1f}".format(100 * cg / sl)
-    ct = s.count_base('T')
-    pt = "{:.1f}".format(100 * ct / sl)
-
-    resp = f"""Sequence: {s}
-Total length: {sl}
-A: {ca} ({pa}%)
-C: {cc} ({pc}%)
-G: {cg} ({pg}%)
-T: {ct} ({pt}%)"""
-    return resp
-
-
-def comp_cmd(strseq):
-    # -- Create the object sequence from the string
-    s = Seq(strseq)
+# COMP option returns the complementary sequence of a sequence introduced previously
+def COMP(SEQ):
+    #First convert the string into an object Seq, then using the class function complement we return the complentary seq
+    s = Seq(SEQ)
     return s.complement()
 
 
-def rev_cmd(strseq):
-    # -- Create the object sequence from the string
-    s = Seq(strseq)
+def REV(SEQ):
+    # First convert the string into an object Seq, then using the class function reverse we return the reversed seq
+    s = Seq(SEQ)
     return s.reverse()
 
 
-def gene_cmd(name):
-    s = Seq(name)
-    s = Seq(s.read_fasta(FOLDER + name + EXT))
+def GENE(FILENAME):
+    s = Seq(FILENAME)
+    s = Seq(s.read_fasta(FOLDER + FILENAME + EXT))
     return str(s)
 
 
@@ -108,42 +96,42 @@ while True:
         lcmds = line0.split(' ')
 
         # -- The first element is the command
-        cmd = lcmds[0]
+        comand= lcmds[0]
 
         # -- Get the first argument
         try:
-            arg = lcmds[1]
+            argument = lcmds[1]
         except IndexError:
             # -- No arguments
-            arg = ""
+            argument = ""
 
         # -- Response message
-        response = ""
+        answer = ""
 
-        if cmd == "PING":
+        if comand == "PING":
             print("PING command!")
-            response = "OK!"
-        elif cmd == "GET":
+            answer = "OK!"
+        elif comand == "GET":
             print("GET")
-            response = get_cmd(int(arg))
-        elif cmd == "INFO":
+            answer = GET(int(argument))
+        elif comand == "INFO":
             print("INFO")
-            response = info_cmd(arg)
-        elif cmd == "COMP":
+            answer = INFO(argument)
+        elif comand == "COMP":
             print("COMP")
-            response = comp_cmd(arg)
-        elif cmd == "REV":
+            answer = COMP(argument)
+        elif comand == "REV":
             print("REV")
-            response = rev_cmd(arg)
-        elif cmd == "GENE":
+            answer = REV(argument)
+        elif comand == "GENE":
             print("GENE")
-            response = gene_cmd(arg)
+            answer = GENE(argument)
         else:
             print("Unknown command!!!")
-            response = "Unkwnown command"
+            answer = "Unkwnown command"
 
         # -- Send the response message
-        response += '\n'
-        print(response)
-        cs.send(response.encode())
+        answer += '\n'
+        print(answer)
+        cs.send(answer.encode())
         cs.close()
