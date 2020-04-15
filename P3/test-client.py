@@ -1,5 +1,5 @@
 from Client0 import Client
-from Seq1 import
+GENE_LIST =["U5", "ADA", "FRAT1", "FXN", "RNU6_269P"]
 
 
 PRACTICE = 3
@@ -47,7 +47,7 @@ print(c.talk(cmd))
 
 # -- Test 6: GENE
 print("* Testing GENE...")
-for gene in ["U5", "ADA", "FRAT1", "FXN", "RNU6_269P"]:
+for gene in GENE_LIST:
     cmd = f"GENE {gene}"
     print(cmd)
     print(c.talk(cmd))
