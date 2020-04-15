@@ -2,52 +2,47 @@ from Client0 import Client
 GENE_LIST =["U5", "ADA", "FRAT1", "FXN", "RNU6_269P"]
 
 
-PRACTICE = 3
-EXERCISE = 7
+print(f"-----| Practice 3, Exercise 7 |------")
 
-print(f"-----| Practice {PRACTICE}, Exercise {EXERCISE} |------")
-
-# -- Parameters of the server to talk to
+# IP and PORT
 IP = "127.0.0.1"
 PORT = 8080
 
-# -- Cofigure the client
+# CLient configuration
 c = Client(IP, PORT)
 print(c)
 
-# -- Test 1: Ping
+# Test PING
 print("* Testing PING...")
 print(c.talk("PING"))
 
-# -- Test 2: Get
+# Test GET
 print("* Testing GET...")
 for i in range(5):
-    cmd = f"GET {i}"
-    print(f"{cmd}: {c.talk(cmd)}", end="")
+    comand = f"GET {i}"
+    print(f"{comand}: {c.talk(comand)}")
 
-# -- Test 3: INFO
-# -- Get the sequence 0 for testing
+# Test INFO
 seq = c.talk("GET 0")
-print()
 print("* Testing INFO...")
-cmd = f"INFO {seq}"
-print(c.talk(cmd))
+comand = f"INFO {seq}"
+print(c.talk(comand))
 
-# -- Test 4: COMP
+# Test COMP
 print("* Testing COMP...")
-cmd = f"COMP {seq}"
-print(cmd, end="")
-print(c.talk(cmd))
+comand = f"COMP {seq}"
+print(comand)
+print(c.talk(comand))
 
 # -- Test 5: REV
 print("* Testing REV...")
 cmd = f"REV {seq}"
-print(cmd, end="")
-print(c.talk(cmd))
+print(comand)
+print(c.talk(comand))
 
 # -- Test 6: GENE
 print("* Testing GENE...")
 for gene in GENE_LIST:
-    cmd = f"GENE {gene}"
-    print(cmd)
-    print(c.talk(cmd))
+    comand = f"GENE {gene}"
+    print(comand)
+    print(c.talk(comand))
