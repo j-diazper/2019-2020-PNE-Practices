@@ -8,11 +8,7 @@ Folder = r"C:\\Users\\jesus.diaz\\PycharmProjects\\2019-2020-PNE-Practices\\P4\\
 
 def reading_html(path):
     cod = 200
-    if path == "/":
-        Filename = "index.html"
-        File = Folder + Filename
-        resp = Path(File).read_text()
-    elif path == "/info/A":
+    if path == "/info/A":
         Filename = "A.html"
         File = Folder + Filename
         resp = Path(File).read_text()
@@ -28,12 +24,6 @@ def reading_html(path):
         Filename = "T.html"
         File = Folder + Filename
         resp = Path(File).read_text()
-    else:
-        Filename = "error.html"
-        File = Folder + Filename
-        resp = Path(File).read_text()
-        cod = 404
-
     return resp, cod
 
 
