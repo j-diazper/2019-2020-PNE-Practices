@@ -1,15 +1,42 @@
-#All the exercises of the practice are written in a single code
-
 import socket
-import pathlib
+from pathlib import Path
+
+
 # -- Server network parameters
 IP = "127.0.0.1"
 PORT = 8080
-def read_fasta(filename):
-    # -- Open and read the html files
-    file_contents = pathlib.Path(filename).read_text().split("\n")[1:]
-    body = "".join(file_contents)
-    return body
+
+
+def get_resource(path):
+    Folder = r"C:\\Users\\jesus.diaz\\PycharmProjects\\2019-2020-PNE-Practices\\P4\\P4\\"
+    cod = 200
+    if path == "/":
+        Filename = "index.html"
+        File = Folder + Filename
+        resp = Path(File).read_text()
+    elif path == "/info/A":
+        Filename = "A.html"
+        File = Folder + Filename
+        resp = Path(File).read_text()
+    elif path == "/info/C":
+        Filename = "C.html"
+        File = Folder + Filename
+        resp = Path(File).read_text()
+    elif path == "/info/G":
+        Filename = "G.html"
+        File = Folder + Filename
+        resp = Path(File).read_text()
+    elif path == "/info/T":
+        Filename = "T.html"
+        File = Folder + Filename
+        resp = Path(File).read_text()
+    else:
+        Filename = "error.html"
+        File = Folder + Filename
+        resp = Path(File).read_text()
+        cod = 404
+
+    return resp, cod
 
 
 def process_client(s):
@@ -28,49 +55,42 @@ def process_client(s):
     print("Request line: ", end="")
     print(req_line)
 
-    # -- Generate the response message
-    # It has the following lines
-    # Status line
-    # header
-    # blank line
-    # Body (content to send)
+    # -- Process the request line
+    words = req_line.split(' ')
 
-    FOLDER = r"C:\Users\jesus.diaz\PycharmProjects\2019-2020-PNE-Practices\P4\P4"
-    file_request = req_line.split()[1]
-    # file_request is like req_line (GET /info/A HTTP/1.1) only with (/info/A), (/info/C) , (/)....
+    # -- Get the method and path
+    method = words[0]
 
-    #Exercise 6
-    if file_request == "/":
-        filename = "\index.html"
-    #Exercise 2
-    elif "/info/A" in file_request:
-        filename = "\A.html"
-    #Exercise 3
-    elif "/info/C" in file_request:
-        filename = "\C.html"
-    #Exercise 4
-    elif "/info/G" in file_request:
-        filename = "\G.html"
-    elif "/info/T" in file_request:
-        filename = "\T.html"
-    #Exercise 5
+    print(f"Method: {method}")
+
+    # -- Response body
+    # -- Initially it is blank
+    resp_body = ""
+
+    # -- Error code
+    code = 0
+
+    if method == "GET":
+        path = words[1]
+        print(f"Path: {path}")
+        resp_body, code = get_resource(path)
+
+    if code == 200:
+        status_str = "OK"
     else:
-        filename = "\error.html"
+        status_str = "Not Found"
 
-    body = read_fasta(FOLDER + filename)
-
-    # This new contents are written in HTML language
     # -- Status line: We respond that everything is ok (200 code)
-    status_line = "HTTP/1.1 200 OK\n"
+    status_line = f"HTTP/1.1 {code} {status_str}\n"
 
     # -- Add the Content-Type header
     header = "Content-Type: text/html\n"
 
     # -- Add the Content-Length
-    header += f"Content-Length: {len(body)}\n"
+    header += f"Content-Length: {len(resp_body)}\n"
 
     # -- Build the message by joining together all the parts
-    response_msg = status_line + header + "\n" + body
+    response_msg = status_line + header + "\r\n" + resp_body
     cs.send(response_msg.encode())
 
 
