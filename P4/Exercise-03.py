@@ -1,22 +1,23 @@
+Folder = r"C:\\Users\\jesus.diaz\\PycharmProjects\\2019-2020-PNE-Practices\\P4\\P4\\"
 import socket
 from pathlib import Path
-# -- Server network parameters
+
+# IP/PORT
 IP = "127.0.0.1"
 PORT = 8080
 
-Folder = r"C:\\Users\\jesus.diaz\\PycharmProjects\\2019-2020-PNE-Practices\\P4\\P4\\"
 
-def reading_html(path):
+
+
+def GEThtml(path):
     cod = 200
     if path == "/info/A":
         Filename = "A.html"
-        File = Folder + Filename
-        resp = Path(File).read_text()
+        resource = Path(Folder + Filename).read_text()
     elif path == "/info/C":
         Filename = "C.html"
-        File = Folder + Filename
-        resp = Path(File).read_text()
-    return (resp, cod)
+        resource = Path(Folder + Filename).read_text()
+    return (resource,cod)
 
 
 def process_client(s):
@@ -41,7 +42,7 @@ def process_client(s):
     # -- Get the method and path
     method = words[0]
 
-    print(f"Method: {method}")
+    print("Method: ",method)
 
     # -- Response body
     # -- Initially it is blank
@@ -52,8 +53,8 @@ def process_client(s):
 
     if method == "GET":
         path = words[1]
-        print(f"Path: {path}")
-        resp_body, code = reading_html(path)
+    print("Path: ", path)
+    resp_body, code = GEThtml(path)
 
     if code == 200:
         status_str = "OK"
@@ -73,7 +74,6 @@ def process_client(s):
     response_msg = status_line + header + "\r\n" + resp_body
     cs.send(response_msg.encode())
 
-
 # -------------- MAIN PROGRAM
 # ------ Configure the server
 # -- Listening socket
@@ -91,6 +91,8 @@ ls.listen()
 print("SEQ Server configured!")
 
 # --- MAIN LOOP
+
+
 while True:
     print("Waiting for clients....")
     try:
@@ -106,3 +108,4 @@ while True:
 
         # -- Close the socket
         cs.close()
+
