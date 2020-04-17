@@ -32,19 +32,20 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         # Modifications for Practice 5
 
         # Message to send back to the client:
-        Folder = r"C:\\Users\\jesus.diaz\\PycharmProjects\\2019-2020-PNE-Practices\\P5\\"
-        if self.path == "" or self.path == "/index.html":
-            file = "index.html"
+        Folder = r"C:\\Users\\jesus.diaz\\PycharmProjects\\2019-2020-PNE-Practices\\P5"
+        if self.path == "" or self.path == "/index.html" or self.path == "/":
+            File = "index.html"
             # Generating the response message
         else:
-            file = self.path
+            File = self.path
 
         try:
-            contents = read_file(Folder + file)  # read_file() is the function read_fasta_data() from other practice
+            contents = read_file(Folder + File)  # read_file() is the function read_fasta_data() from other practice
             # Generating the response message
             self.send_response(200)  # -- Status line: OK!
         except FileNotFoundError:
-            contents = read_file(Folder + "error.html")
+            File = "error.html"
+            contents = read_file(Folder + File)
             # Generating the response message
             self.send_response(404)  # -- Status line: ERROR NOT FOUND
 
