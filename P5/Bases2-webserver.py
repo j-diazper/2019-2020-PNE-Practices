@@ -3,7 +3,7 @@ import pathlib
 import socketserver
 
 
-# Define the Server's port
+# Port
 PORT = 8080
 
 # -- This is for preventing the error: "Port already in use"
