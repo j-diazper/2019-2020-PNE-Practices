@@ -18,7 +18,8 @@ txt = ".txt"
 
 class TestHandler(http.server.BaseHTTPRequestHandler):
     def do_get(self):
-        """This method is called whenever the client invokes the GET method
+        """This method
+        is called whenever the client invokes the GET method
         in the HTTP protocol request"""
         print(self.requestline)
         # We get the first request line and then the path, goes after /. We get the arguments that go after the ? symbol
@@ -28,15 +29,15 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         # Action is the first argument
         action = arguments[0]
         contents = Path('error.html').read_text()
-        code = 404
+        code = 200
         # First we open form-4.html if we don´t specify any action, this is the Index menu
         if action == "/":
             contents = Path('form-4.html').read_text()
-            code = 200
+
         elif action == "/ping":
             contents = """<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title> Ping </title ></head >
             <body><h2> PING OK!</h2><p> The SEQ2 server in running.... </p><a href="/">Main page</a></body></html>"""
-            code = 200
+
         elif action == "/get":
             # We get the arguments that go after the ? symbol
             get_value = arguments[1]
@@ -50,7 +51,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             # This is the html code that will show up once we are getting back the sequence we selected
             contents = f"""<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title> Get </title ></head >
             <body><h2> Sequence number {index}</h2><p> {seq} </p><a href="/">Main page</a></body></html>"""
-            code = 200
+
         elif action == "/gene":
             # We get the arguments that go after the ? symbol
             gene_value = arguments[1]
@@ -68,7 +69,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             contents = f"""<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title> Gene </title ></head>
             <body><h2> Gene: {gene}</h2><textarea readonly rows="20" cols="80"> {gene_seq} </textarea><br><br>
             <a href="/">Main page</a></body></html>"""
-            code = 200
+
         elif action == "/operation":
             # We get the arguments that go after the ? symbol
             pair = arguments[1]
@@ -100,9 +101,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             contents = f"""<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title> Operation </title >
             </head ><body><h2> Sequence </h2><p>{seq}</p><h2> Operation: </h2><p>{op}</p><h2> Result: </h2><p>{result}
             </p><br><br><a href="/">Main page</a></body></html>"""
-            code = 200
-
-            # Generating the response message
+        # Generating the response message
         self.send_response(code)  # -- Status line: OK!
 
         # Define the content-type header:
