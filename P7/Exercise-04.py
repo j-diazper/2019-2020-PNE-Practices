@@ -2,43 +2,26 @@ import http.client
 import json
 from Seq1 import Seq
 
+gene_list = {'FRAT1': 'ENSG00000165879', 'ADA': 'ENSG00000196839', 'FXN': 'ENSG00000165060', 'RNU6_269P': 'ENSG00000212379',
+'MIR633': 'ENSG00000207552', 'TTTY4C': 'ENSG00000228296', 'RBMY2YP': 'ENSG00000227633', 'FGFR3': 'ENSG00000068078',
+'KDR': 'ENSG00000128052', 'ANK2': 'ENSG00000145362'}
+base_list = ['A', 'T', 'C', 'G']
 
-GENES = {
-    'FRAT1': 'ENSG00000165879',
-    'ADA': 'ENSG00000196839',
-    'FXN': 'ENSG00000165060',
-    'RNU6_269P': 'ENSG00000212379',
-    'MIR633': 'ENSG00000207552',
-    'TTTY4C': 'ENSG00000228296',
-    'RBMY2YP': 'ENSG00000227633',
-    'FGFR3': 'ENSG00000068078',
-    'KDR': 'ENSG00000128052',
-    'ANK2': 'ENSG00000145362',
-}
+server = 'rest.ensembl.org'
+endpoint = '/sequence/id/'
+parameters = '?content-type=application/json'
 
-BASES = ['A', 'T', 'C', 'G']
-
-SERVER = 'rest.ensembl.org'
-ENDPOINT = '/sequence/id/'
-PARAMETERS = '?content-type=application/json'
-
-# -- Ask the user to enter the gene name
-print()
+# We ask to introduce a gene´s name
 name = input("Write the gene name: ")
-
-REQ = ENDPOINT + GENES[name] + PARAMETERS
-URL = SERVER + REQ
-
-print()
-print("Server:", SERVER)
-print("URL: ", URL)
+url = server + endpoint + gene_list[name] + parameters
+print("Server:", server)
+print("URL: ", url)
 
 # Connect with the server
-conn = http.client.HTTPConnection(SERVER)
-
+conn = http.client.HTTPConnection(server)
+request = endpoint + gene_list[name] + parameters
 try:
-    conn.request("GET", REQ)
-
+    conn.request("GET", request)
 except ConnectionRefusedError:
     print("ERROR! Cannot connect to the Server")
     exit()
@@ -61,42 +44,31 @@ print(":", name)
 print("Description", end="")
 print(":", gene['desc'])
 
-genestr = gene['seq']
+body = gene['seq']
 
-# -- Create the object sequence from the string
-s = Seq(genestr)
-
-sl = s.len()
-ca = s.count_base('A')
-pa = "{:.1f}".format(100 * ca / sl)
-cc = s.count_base('C')
-pc = "{:.1f}".format(100 * cc / sl)
-cg = s.count_base('G')
-pg = "{:.1f}".format(100 * cg / sl)
-ct = s.count_base('T')
-pt = "{:.1f}".format(100 * ct / sl)
-
-print("Total lengh", end="")
-print(":", sl)
-
-print("A", end="")
-print(":", ca, pa,"%")
-print("C", end="")
-print(":", cc, pc,"%")
-print("G", end="")
-print(":", cg, pg,"%")
-print("T", end="")
-print(":", ct, pt, "%")
+# We use class Seq for using its functions
+seq = Seq(body)
+length = seq.len()
+counter_a = seq.count_base('A')
+counter_g = seq.count_base('G')
+counter_c = seq.count_base('C')
+counter_t = seq.count_base('T')
+perc_a = 100 * counter_a / length
+perc_g = 100 * counter_g / length
+perc_c = 100 * counter_c / length
+perc_t = 100 * counter_t / length
+print("""<p>Total length: {length}</p><p>A: {counter_a} ({perc_a}%)</p><p>G: {counter_g} ({perc_g}%)
+{counter_c} ({perc_c}%)</p><p>T: {counter_t} ({perc_t}%)</p>""")
 
 # -- Dictionary with the values
-d = s.count(BASES)
+dic = seq.count(base_list)
 
 # -- Create a list with all the values
-ll = list(d.values())
+value_list = list(dic.values())
 
 # -- Calculate the maximum
-m = max(ll)
+maximum = max(value_list)
 
 # -- Print the base
 print("Most frequent Base", end="")
-print(f": {BASES[ll.index(m)]}")
+print(": ",base_list[value_list.index(maximum)])
