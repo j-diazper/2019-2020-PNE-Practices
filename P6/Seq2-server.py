@@ -7,9 +7,7 @@ PORT = 8080
 # -- This is for preventing the error: "Port already in use"
 socketserver.TCPServer.allow_reuse_address = True
 # List of sequences for Get option
-Seq_List = ["""AGATCGCGCCACTTCACTGCAGCCTCCGCGAAAGAGCGAAACTCCGTCTCA","TCCTTTCACTCCCAGCTCCCTGGAGTCTCTCACGTAGAATGTCCTCTCCAC
-CCCCACCCA","CAGGAGGCTGAGGCGGGAGGATCGCTTGAGCCCAGGAGGTTGAGGCTGCAGTGAGGTGTG","CACTTGCAAATCATGCAGTTTATGTAGCATTTTCATTTAACACCT
-TCTCCCAACCATCTC","CTATGCTAACCCTGTGAACCGTTGCTCGCTTCTCCTTGACATCTGACGGCCTGGCCTTCT"""]
+Seq_List = ["AGATCGCGCCACTTCACTGCAGCCTCCGCGAAAGAGCGAAACTCCGTCTCA","TCCTTTCACTCCCAGCTCCCTGGAGTCTCTCACGTAGAATGTCCTCTCCACCCCCACCCA","CAGGAGGCTGAGGCGGGAGGATCGCTTGAGCCCAGGAGGTTGAGGCTGCAGTGAGGTGTG","CACTTGCAAATCATGCAGTTTATGTAGCATTTTCATTTAACACCTTCTCCCAACCATCTC","CTATGCTAACCCTGTGAACCGTTGCTCGCTTCTCCTTGACATCTGACGGCCTGGCCTTCT"""]
 Folder = r"C:\\Users\\jesus.diaz\\PycharmProjects\\2019-2020-PNE-Practices\\Practice 1\\P1\\"
 txt = ".txt"
 # Class with our Handler. It is a called derived from BaseHTTPRequestHandler
@@ -17,7 +15,7 @@ txt = ".txt"
 
 
 class TestHandler(http.server.BaseHTTPRequestHandler):
-    def do_get(self):
+    def do_GET(self):
         """This method
         is called whenever the client invokes the GET method
         in the HTTP protocol request"""
@@ -57,7 +55,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             gene_value = arguments[1]
             # After we have a couple of elements, the one which we need is the name of the gene, for reading the file
             # using the specific function from Seq class
-            pairs = gene_value.split('?')
+            pairs = gene_value.split('&')
             gene_name, gene = pairs[0].split("=")
             # We call Seq class and read the file correspondent to the gene variable, we read the file, get the seq and
             # convert into string
@@ -125,6 +123,7 @@ Handler = TestHandler
 
 # -- Open the socket server
 with socketserver.TCPServer(("", PORT), Handler) as httpd:
+
     print("Serving at PORT", PORT)
 
     # -- Main loop: Attend the client. Whenever there is a new
