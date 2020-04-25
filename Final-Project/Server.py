@@ -1,4 +1,5 @@
 import http.server
+import http.client
 import socketserver
 from pathlib import Path
 from Seq1 import Seq
@@ -32,9 +33,35 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         if action == "/":
             contents = Path('form-4.html').read_text()
 
-        elif action == "/ping":
-            contents = """<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title> Ping </title ></head >
-            <body><h2> PING OK!</h2><p> The SEQ2 server in running.... </p><a href="/">Main page</a></body></html>"""
+        elif action == "/listSpecies":
+            # We get the arguments that go after the ? symbol
+            get_value = arguments[1]
+            # We get the seq index, after we have a couple of elements, the one which we need is the value of the index
+            # position of the sequence
+            seq_n = get_value.split('?')
+            seq_name, index = seq_n[0].split("=")
+            index = int(index)
+            server = 'rest.ensembl.org'
+            endpoint = 'info/species'
+            parameters = '?content-type=application/json'
+            conn = http.client.HTTPConnection(server)
+            request = endpoint + parameters
+            try:
+                conn.request("GET", request)
+            except ConnectionRefusedError:
+                print("ERROR! Cannot connect to the Server")
+                exit()
+            # -- Read the response message from the server
+            response = conn.getresponse()
+            # -- Read the response's body
+            body = response.read().decode()
+            list = ""
+
+            for element in body:
+                list += element
+                if body.index(element) == index:
+                    contents = f"""<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title> Ping </title ></head >
+                    <body><h2> {list}</h2><p> The SEQ2 server in running.... </p><a href="/">Main page</a></body></html>"""
 
         elif action == "/get":
             # We get the arguments that go after the ? symbol
