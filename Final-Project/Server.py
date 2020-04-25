@@ -56,13 +56,12 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             response = conn.getresponse()
             # -- Read the response's body
             body = response.read().decode()
-            limit_list = ""
+            limit_list = []
             body = json.loads(body)
-            names = [i[1] for i in body]
-
-            for element in names:
-                limit_list += element
-                if names.index(element) == index:
+            limit = body["species"]
+            for element in limit:
+                limit_list += element["display_name"]
+                if len(limit_list) == index:
                     break
             contents = f"""<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title></title ></head >
             <body><h2></h2><p>The total number of species in ensembl is: 267</p><p>{limit_list}</p><a href="/">Main page</a></body></html>"""
