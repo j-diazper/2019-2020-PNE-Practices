@@ -3,6 +3,7 @@ import http.client
 import socketserver
 from pathlib import Path
 from Seq1 import Seq
+import json
 # Port
 PORT = 8080
 # -- This is for preventing the error: "Port already in use"
@@ -55,13 +56,16 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             response = conn.getresponse()
             # -- Read the response's body
             body = response.read().decode()
-            list = ""
+            limit_list = ""
+            body = json.loads(body)
+            names = [i[1] for i in body]
 
-            for element in body:
-                list += element
-                if body.index(element) == index:
-                    contents = f"""<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title> Ping </title ></head >
-                    <body><h2> {list}</h2><p> The SEQ2 server in running.... </p><a href="/">Main page</a></body></html>"""
+            for element in names:
+                limit_list += element
+                if names.index(element) == index:
+                    break
+            contents = f"""<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title></title ></head >
+            <body><h2></h2><p>The total number of species in ensembl is: 267</p><p>{limit_list}</p><a href="/">Main page</a></body></html>"""
 
         elif action == "/get":
             # We get the arguments that go after the ? symbol
