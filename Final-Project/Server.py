@@ -60,11 +60,13 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             body = json.loads(body)
             limit = body["species"]
             for element in limit:
-                limit_list += element["display_name"]
+                limit_list.append(element["display_name"])
                 if len(limit_list) == index:
+                    result_species = '\n'.join(limit_list)
+                    print(result_species)
                     break
             contents = f"""<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title></title ></head >
-            <body><h2></h2><p>The total number of species in ensembl is: 267</p><p>{limit_list}</p><a href="/">Main page</a></body></html>"""
+            <body><h2></h2><p>The total number of species in ensembl is: 267</p><p>{result_species}</p><a href="/">Main page</a></body></html>"""
 
         elif action == "/get":
             # We get the arguments that go after the ? symbol
