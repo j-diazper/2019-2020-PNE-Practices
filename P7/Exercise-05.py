@@ -14,7 +14,7 @@ endpoint = '/sequence/id/'
 parameters = '?content-type=application/json'
 
 # -- List for storing the A percentages
-list_A = []
+
 
 # -- Repeat the process for all the genes
 for name in gene_list:
