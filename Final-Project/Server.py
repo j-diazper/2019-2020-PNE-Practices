@@ -25,9 +25,9 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         action = arguments[0]
         contents = Path('error.html').read_text()
         code = 200
-        # First we open form-4.html if we don´t specify any action, this is the Index menu
+        # First we open index.html if we don´t specify any action, this is the Index menu
         if action == "/":
-            contents = Path('form-4.html').read_text()
+            contents = Path('index.html').read_text()
 
         elif action == "/listSpecies":
             contents = f"""<!DOCTYPE html>
@@ -74,9 +74,11 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
         elif action == "/karyotype":
             contents = f"""<!DOCTYPE html>
-            <html lang = "en"><head>
-            <meta charset = "utf-8" >
-            <title> Karyotype </title ></head >
+            <html lang = "en">
+            <head>
+                <meta charset = "utf-8" >
+                 <title> Karyotype </title >
+            </head >
             <body>
             <h2> The names of the chromosomes are:</h2>"""
             # We get the arguments that go after the ? symbol
@@ -98,10 +100,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             # -- Read the response message from the server
             response = conn.getresponse()
             # -- Read the response's body
-            body = response.read().decode()
+            body = response.read().decode("utf-8")
             body = json.loads(body)
-            karyotype = body['karyotype']
-            for chromosome in karyotype:
+            karyotype_data = body['karyotype']
+            for chromosome in karyotype_data:
                 contents += f"""<p> - {chromosome} </p>"""
             contents += f"""<a href="/">Main page </a></body></html>"""
 

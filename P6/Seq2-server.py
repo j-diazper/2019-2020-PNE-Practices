@@ -28,9 +28,9 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         action = arguments[0]
         contents = Path('error.html').read_text()
         code = 200
-        # First we open form-4.html if we don´t specify any action, this is the Index menu
+        # First we open index.html if we don´t specify any action, this is the Index menu
         if action == "/":
-            contents = Path('form-4.html').read_text()
+            contents = Path('index.html').read_text()
 
         elif action == "/ping":
             contents = """<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title> Ping </title ></head >
