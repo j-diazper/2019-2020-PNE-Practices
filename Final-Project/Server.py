@@ -2,7 +2,6 @@ import http.server
 import http.client
 import socketserver
 from pathlib import Path
-from Seq1 import Seq
 import json
 # Port
 PORT = 8080
@@ -35,6 +34,8 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             contents = Path('form-4.html').read_text()
 
         elif action == "/listSpecies":
+            contents = f"""<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title></title ></head >
+            <body><h2></h2><p>The total number of species in ensembl is: 267</p><p></p>"""
             # We get the arguments that go after the ? symbol
             get_value = arguments[1]
             # We get the seq index, after we have a couple of elements, the one which we need is the value of the index
@@ -42,6 +43,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             seq_n = get_value.split('?')
             seq_name, index = seq_n[0].split("=")
             index = int(index)
+            contents += f"""<p>The number of species you selected are: {index} </p>"""
             server = 'rest.ensembl.org'
             endpoint = 'info/species'
             parameters = '?content-type=application/json'
@@ -62,75 +64,75 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             for element in limit:
                 limit_list.append(element["display_name"])
                 if len(limit_list) == index:
-                    result_species = '\n'.join(limit_list)
-                    print(result_species)
-                    break
-            contents = f"""<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title></title ></head >
-            <body><h2></h2><p>The total number of species in ensembl is: 267</p><p>{result_species}</p><a href="/">Main page</a></body></html>"""
+                    contents += f"""<p>The species are: </p>"""
+                    for specie in limit_list:
+                        contents += f"""<p> - {specie} </p>"""
 
-        elif action == "/get":
+            contents += f"""<a href="/">Main page</a></body></html>"""
+
+        elif action == "/karyotype":
+            contents = f"""<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title> Get </title ></head >
+            <body><h2> The names of the chromosomes are:</h2>"""
             # We get the arguments that go after the ? symbol
             get_value = arguments[1]
             # We get the seq index, after we have a couple of elements, the one which we need is the value of the index
             # position of the sequence
             seq_n = get_value.split('?')
-            seq_name, index = seq_n[0].split("=")
-            index = int(index)
-            # Once we have the index we can get our sequence from Seq_List
-            seq = Seq_List[index]
-            # This is the html code that will show up once we are getting back the sequence we selected
-            contents = f"""<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title> Get </title ></head >
-            <body><h2> Sequence number {index}</h2><p> {seq} </p><a href="/">Main page</a></body></html>"""
+            seq_name, name_sp = seq_n[0].split("=")
+            server = 'rest.ensembl.org'
+            endpoint = 'info/assembly/'
+            parameters = '?content-type=application/json'
+            conn = http.client.HTTPConnection(server)
+            request = endpoint + name_sp + parameters
+            try:
+                conn.request("GET", request)
+            except ConnectionRefusedError:
+                print("ERROR! Cannot connect to the Server")
+                exit()
+            # -- Read the response message from the server
+            response = conn.getresponse()
+            # -- Read the response's body
+            body = response.read().decode()
+            body = json.loads(body)
+            karyotype = body['karyotype']
+            for chromosome in karyotype:
+                contents += f"""<p> - {chromosome} </p>"""
+            contents += f""""<a href="/"> Main page </a></body></html>"""
 
-        elif action == "/gene":
-            # We get the arguments that go after the ? symbol
-            gene_value = arguments[1]
-            # After we have a couple of elements, the one which we need is the name of the gene, for reading the file
-            # using the specific function from Seq class
-            pairs = gene_value.split('&')
-            gene_name, gene = pairs[0].split("=")
-            # We call Seq class and read the file correspondent to the gene variable, we read the file, get the seq and
-            # convert into string
-            s = Seq()
-            filename = Folder + gene + txt
-            seq = Seq(s.read_fasta(filename))
-            gene_seq = str(seq)
-            # This is the html code that will show up once we are getting back the sequence we selected
-            contents = f"""<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title> Gene </title ></head>
-            <body><h2> Gene: {gene}</h2><textarea readonly rows="20" cols="80"> {gene_seq} </textarea><br><br>
-            <a href="/">Main page</a></body></html>"""
-
-        elif action == "/operation":
+        elif action == "/chromosomeLength":
             # We get the arguments that go after the ? symbol
             pair = arguments[1]
             # We have a couple of elements, we need the sequence that we previously wrote and the operation to perform
             # that we previously selected
             pairs = pair.split('&')
-            seq_name, seq = pairs[0].split("=")
-            op_name, op = pairs[1].split("=")
-            # Using Seq class we transform the sequence we introduced. According to the operation we selected we will
-            # use one function of the class or other
-            seq = Seq(seq)
-            if op == "rev":
-                result = seq.reverse()
-            elif op == "comp":
-                result = seq.complement()
+            specie_name, specie = pairs[0].split("=")
+            chromosome_index, chromosome = pairs[1].split("=")
+            server = 'rest.ensembl.org'
+            endpoint = 'info/assembly/'
+            parameters = '?content-type=application/json'
+            conn = http.client.HTTPConnection(server)
+            request = endpoint + specie + parameters
+            try:
+                conn.request("GET", request)
+            except ConnectionRefusedError:
+                print("ERROR! Cannot connect to the Server")
+                exit()
+            # -- Read the response message from the server
+            response = conn.getresponse()
+            # -- Read the response's body
+            body = response.read().decode()
+            body = json.loads(body)
+            chromosome_data = body["top_level_region"]
+            if specie == "" or chromosome == "":
+                contents = Path('error.html').read_text()
             else:
-                length = seq.len()
-                counter_a = seq.count_base('A')
-                counter_g = seq.count_base('G')
-                counter_c = seq.count_base('C')
-                counter_t = seq.count_base('T')
-                perc_a = 100 * counter_a / length
-                perc_g = 100 * counter_g / length
-                perc_c = 100 * counter_c / length
-                perc_t = 100 * counter_t / length
-                result = f"""<p>Total length: {length}</p><p>A: {counter_a} ({perc_a}%)</p><p>G: {counter_g} ({perc_g}%)
-                </p><p>C: {counter_c} ({perc_c}%)</p><p>T: {counter_t} ({perc_t}%)</p>"""
+                for chromo in chromosome_data:
+                    if chromo["name"] == chromosome:
+                        length = chromo["length"]
+                        contents = f"""<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title> Length Chromosome</title >
+                        </head ><body><h2> The length of the chromosome is: {length} </h2><a href="/">Main page</a></body></html>"""
 
-            contents = f"""<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title> Operation </title >
-            </head ><body><h2> Sequence </h2><p>{seq}</p><h2> Operation: </h2><p>{op}</p><h2> Result: </h2><p>{result}
-            </p><br><br><a href="/">Main page</a></body></html>"""
+
         # Generating the response message
         self.send_response(code)  # -- Status line: OK!
 
