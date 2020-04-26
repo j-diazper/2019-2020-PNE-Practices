@@ -34,8 +34,14 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             contents = Path('form-4.html').read_text()
 
         elif action == "/listSpecies":
-            contents = f"""<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title></title ></head >
-            <body><h2></h2><p>The total number of species in ensembl is: 267</p><p></p>"""
+            contents = f"""<!DOCTYPE html>
+            <html lang = "en">
+            <head>
+             <meta charset = "utf-8" >
+             <title>List of species in the browser</title >
+            </head >
+            <body>
+            <p>The total number of species in ensembl is: 267</p>"""
             # We get the arguments that go after the ? symbol
             get_value = arguments[1]
             # We get the seq index, after we have a couple of elements, the one which we need is the value of the index
@@ -71,8 +77,12 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             contents += f"""<a href="/">Main page</a></body></html>"""
 
         elif action == "/karyotype":
-            contents = f"""<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title> Get </title ></head >
-            <body><h2> The names of the chromosomes are:</h2>"""
+            contents = f"""<!DOCTYPE html>
+            <html lang = "en"><head>
+            <meta charset = "utf-8" >
+            <title> Karyotype </title ></head >
+            <body>
+            <h2> The names of the chromosomes are:</h2>"""
             # We get the arguments that go after the ? symbol
             get_value = arguments[1]
             # We get the seq index, after we have a couple of elements, the one which we need is the value of the index
@@ -97,7 +107,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             karyotype = body['karyotype']
             for chromosome in karyotype:
                 contents += f"""<p> - {chromosome} </p>"""
-            contents += f""""<a href="/"> Main page </a></body></html>"""
+            contents += f"""<a href="/">Main page </a></body></html>"""
 
         elif action == "/chromosomeLength":
             # We get the arguments that go after the ? symbol
@@ -123,6 +133,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             body = response.read().decode()
             body = json.loads(body)
             chromosome_data = body["top_level_region"]
+
             if specie == "" or chromosome == "":
                 contents = Path('error.html').read_text()
             else:
