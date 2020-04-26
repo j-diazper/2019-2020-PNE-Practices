@@ -250,4 +250,17 @@ TEST 5:
 
 * Input:
 
+http://127.0.0.1:8080/karyotype?Specie=armadillo
 
+*Output:
+
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset = "utf-8">
+    <title> Karyotype </title >
+</head >
+<body>
+<h2> The names of the chromosomes are:</h2><a href="/">Main page </a></body></html>
+
+**Like the armadillo, there are more animals whose karyotype is not stored in the ensembl.org database
