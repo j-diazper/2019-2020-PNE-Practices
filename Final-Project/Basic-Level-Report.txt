@@ -264,3 +264,60 @@ http://127.0.0.1:8080/karyotype?Specie=armadillo
 <h2> The names of the chromosomes are:</h2><a href="/">Main page </a></body></html>
 
 **Like the armadillo, there are more animals whose karyotype is not stored in the ensembl.org database
+------------------------------------------------------------------------------------------------------------------------
+TEST 6:
+
+* Input:
+
+http://127.0.0.1:8080/karyotype?Specie=dinosaur
+
+*Output:
+
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset = "utf-8" >
+    <title>ERROR</title >
+</head>
+<body>
+<p>ERROR INVALID INPUT. Please introduce an specie stored in the ensembl´s database</p>
+<a href="/">Main page</a></body></html>
+
+**This is the output we receive when we introduce a specie (in conclusion any string) which is not in ensemble´s database
+------------------------------------------------------------------------------------------------------------------------
+TEST 7:
+
+* Input:
+
+http://127.0.0.1:8080/karyotype?Specie=1
+
+*Output:
+
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset = "utf-8" >
+    <title>ERROR</title >
+</head>
+<body>
+<p>ERROR INVALID INPUT. Introduce a specie for searching its karyotype</p>
+<a href="/">Main page</a></body></html>
+
+** This is the output we receive when we introduce a numeric value (int or float) as a specie
+------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+
+---> chromosomeLength endpoint
+
+TEST 1:
+
+* Input:
+
+http://127.0.0.1:8080/karyotype?Specie=1
+
+*Output:
+
+
+
+
+

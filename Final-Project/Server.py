@@ -153,7 +153,6 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     <p>ERROR INVALID INPUT. Please introduce an specie stored in the ensembl´s database</p>
                     <a href="/">Main page</a></body></html>"""
 
-
         elif action == "/chromosomeLength":
             # We get the arguments that go after the ? symbol
             pair = arguments[1]
@@ -162,91 +161,52 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             pairs = pair.split('&')
             specie_name, specie = pairs[0].split("=")
             chromosome_index, chromosome = pairs[1].split("=")
+            server = 'rest.ensembl.org'
+            endpoint = 'info/assembly/'
+            parameters = '?content-type=application/json'
+            conn = http.client.HTTPConnection(server)
+            request = endpoint + specie + parameters
             try:
-                specie= int(specie)
-                contents = f"""<!DOCTYPE html>
-                <html lang = "en">
-                <head>
-                 <meta charset = "utf-8" >
-                 <title>ERROR</title >
-                </head>
-                <body>
-                <p>ERROR INVALID VALUE. Introduce an integer value for chromosome</p>
-                <a href="/">Main page</a></body></html>"""
-            except ValueError:
-                try:
-                    chromosome=int(chromosome)
-                    server = 'rest.ensembl.org'
-                    endpoint = 'info/assembly/'
-                    parameters = '?content-type=application/json'
-                    conn = http.client.HTTPConnection(server)
-                    request = endpoint + specie + parameters
-                    try:
-                        conn.request("GET", request)
-                    except ConnectionRefusedError:
-                        print("ERROR! Cannot connect to the Server")
-                        exit()
-                    # -- Read the response message from the server
-                    response = conn.getresponse()
-                    # -- Read the response's body
-                    body = response.read().decode()
-                    body = json.loads(body)
-                    try:
-                        chromosome_data = body["top_level_region"]
-                        if specie == "" or chromosome == "":
-                            contents = Path('error.html').read_text()
-                        else:
-                            for chromo in chromosome_data:
-                                if chromo["name"] == chromosome:
-                                    length = chromo["length"]
-                                    contents = f"""<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title> Length Chromosome</title >
-                                                    </head ><body><h2> The length of the chromosome is: {length} </h2><a href="/">Main page</a"""
-                                else:
-                                    contents = f"""<!DOCTYPE html>
-                                    <html lang = "en">
-                                    <head>
-                                     <meta charset = "utf-8" >
-                                     <title>ERROR</title >
-                                    </head>
-                                    <body>
-                                    <p>INDEX OUT OF RANGE. Please introduce a valid chromosome</p>
-                                    <a href="/">Main page</a></body></html>"""
-                    except KeyError:
-                        contents = f"""<!DOCTYPE html>
-                        <html lang = "en">
-                        <head>
-                         <meta charset = "utf-8" >
-                         <title>ERROR</title >
-                        </head>
-                        <body>
-                        <p>ERROR INVALID INPUT. Please introduce a valid specie stored in ensemble´s database</p>
-                        <a href="/">Main page</a></body></html>"""
+                conn.request("GET", request)
+            except ConnectionRefusedError:
+                print("ERROR! Cannot connect to the Server")
+                exit()
+            # -- Read the response message from the server
+            response = conn.getresponse()
+            # -- Read the response's body
+            body = response.read().decode()
+            body = json.loads(body)
+            chromosome_data = body["top_level_region"]
+            for chromo in chromosome_data:
+                if chromo["name"] == chromosome:
+                      length = chromo["length"]
+                      contents = f"""<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title> Length Chromosome</title >
+                      </head ><body><h2> The length of the chromosome is: {length}</h2><a href="/"> Main page</a"""
+                else:
+                      contents = f"""<!DOCTYPE html>
+                                <html lang = "en">
+                                <head>
+                                 <meta charset = "utf-8" >
+                                 <title>ERROR</title >
+                                </head>
+                                <body>
+                                <p>INDEX OUT OF RANGE. Please introduce a valid chromosome</p>
+                                <a href="/">Main page</a></body></html>"""
 
-                except ValueError:
-                    contents = f"""<!DOCTYPE html>
-                    <html lang = "en">
-                    <head>
-                     <meta charset = "utf-8" >
-                     <title>ERROR</title >
-                    </head>
-                    <body>
-                    <p>ERROR INVALID INPUT. Please introduce a valid chromosome</p>
-                    <a href="/">Main page</a></body></html>"""
 
-        # Generating the response message
-        self.send_response(code)  # -- Status line: OK!
+            # Generating the response message
+            self.send_response(code)  # -- Status line: OK!
 
-        # Define the content-type header:
-        self.send_header('Content-Type', 'text/html')
-        self.send_header('Content-Length', len(str.encode(contents)))
+            # Define the content-type header:
+            self.send_header('Content-Type', 'text/html')
+            self.send_header('Content-Length', len(str.encode(contents)))
 
-        # The header is finished
-        self.end_headers()
+            # The header is finished
+            self.end_headers()
 
-        # Send the response message
-        self.wfile.write(str.encode(contents))
-
-        return
+            # Send the response message
+            self.wfile.write(str.encode(contents))
+            return
 
 
 # ------------------------
