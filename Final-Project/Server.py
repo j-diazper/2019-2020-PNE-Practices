@@ -298,9 +298,46 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     contents += f"""<p> {base} : {sequence.count_base(base)} ({perc_base}%) </p>"""
                 contents += f"""<a href="/">Main page</a></body></html>"""
 
-            elif action ==
+            elif action == "/geneList":
+                contents = f"""<!DOCTYPE html>
+                  <html lang = "en">            
+                  <head>  
+                  <meta charset = "utf-8"
+                  <title> Gene List</title>
+                  </head>"""
+                endpoint = "overlap/region/human/"
+                get_value = arguments[1]
+                # We get the seq index, after we have a couple of elements, the one which we need is the value of the index
+                # position of the sequence
+                pairs = get_value.split('&')
+                chromo_value, chromo = pairs[0].split("=")
+                chromosome_start, start = pairs[1].split("=")
+                chromosome_end, end = pairs[2].split("=")
+                contents += f"""<p> List of genes of the chromosome {chromo}, which goes from {start} to {end} </p>"""
+                server = 'rest.ensembl.org'
+                parameters = '?feature=gene;content-type=application/json'
+                request = endpoint + chromo + ":" + start + "-" + end + parameters
+
+                conn = http.client.HTTPConnection(server)
+                try:
+                    conn.request("GET", request)
+                except ConnectionRefusedError:
+                    print("ERROR! Cannot connect to the Server")
+                    exit()
+                response = conn.getresponse()
+                # -- Read the response's body
+                body = response.read().decode("utf-8")
+                body = json.loads(body)
+                for element in body:
+                    print(element["external_name"])
+                    contents += f"""<p>{element["external_name"]}</p>"""
+                contents += f"""<a href="/">Main page</a></body></html>"""
 
 
+
+
+
+#97321915  97319271
 
         except (KeyError,ValueError,IndexError,TypeError):
             contents = Path('error.html').read_text()
