@@ -1,61 +1,79 @@
-import http.client
-import json
+import http.server
+import socketserver
+from pathlib import Path
 
+# Define the Server's port
 PORT = 8080
-SERVER = 'localhost'
 
-print(f"\nConnecting to server: {SERVER}:{PORT}\n")
 
-# Connect with the server
-conn = http.client.HTTPConnection(SERVER, PORT)
+# -- This is for preventing the error: "Port already in use"
+socketserver.TCPServer.allow_reuse_address = True
 
-# -- Send the request message, using the GET method. We are
-# -- requesting the main page (/)
-try:
-    conn.request("GET", "/listusers")
-except ConnectionRefusedError:
-    print("ERROR! Cannot connect to the Server")
-    exit()
 
-# -- Read the response message from the server
-r1 = conn.getresponse()
+# Class with our Handler. It is a called derived from BaseHTTPRequestHandler
+# It means that our class inheritates all his methods and properties
+class TestHandler(http.server.BaseHTTPRequestHandler):
 
-# -- Print the status line
-print(f"Response received!: {r1.status} {r1.reason}\n")
+    def do_GET(self):
+        """This method is called whenever the client invokes the GET method
+        in the HTTP protocol request"""
 
-# -- Read the response's body
-data1 = r1.read().decode("utf-8")
+        # Print the request line
+        print(self.requestline)
 
-# -- Create a variable with the data,
-# -- form the JSON received
-persons = json.loads(data1)
+        # -- Parse the path
+        # -- NOTE: self.path already contains the requested resource
+        list_resource = self.path.split('?')
+        resource = list_resource[0]
 
-print("CONTENT: ")
+        if resource == "/":
+            # Read the file
+            contents = Path('index.html').read_text()
+            content_type = 'text/html'
+            error_code = 200
+        elif resource == "/listusers":
+            # Read the file
+            contents = Path('people-exercise01.json').read_text()
+            content_type = 'application/json'
+            error_code = 200
+        else:
+            # Read the file
+            contents = Path('Error.html').read_text()
+            content_type = 'text/html'
+            error_code = 404
 
-print(f"Total people in the Database: {len(persons)}")
+        # Generating the response message
+        self.send_response(error_code)  # -- Status line: OK!
 
-for person in persons:
+        # Define the content-type header:
+        self.send_header('Content-Type', content_type)
+        self.send_header('Content-Length', len(str.encode(contents)))
 
-    # Print the information on the console, in colors
-    print()
-    print("Name: ", end="")
-    print(person['Firstname'], person['Lastname'])
-    print("Age: ", end="")
-    print(person['age'])
+        # The header is finished
+        self.end_headers()
 
-    # Get the phoneNumber list
-    phoneNumbers = person['phoneNumber']
+        # Send the response message
+        self.wfile.write(str.encode(contents))
 
-    # Print the number of elements in the list
-    print("Phone numbers: ", end='')
-    print(len(phoneNumbers))
+        return
 
-    # Print all the numbers
-    for i, num in enumerate(phoneNumbers):
-        print("  Phone {}:".format(i))
 
-        # The element num contains 2 fields: number and type
-        print("    Type: ", end='')
-        print(num['type'])
-        print("    Number: ", end='')
-        print(num['number'])
+# ------------------------
+# - Server MAIN program
+# ------------------------
+# -- Set the new handler
+Handler = TestHandler
+
+# -- Open the socket server
+with socketserver.TCPServer(("", PORT), Handler) as httpd:
+
+    print("Serving at PORT", PORT)
+
+    # -- Main loop: Attend the client. Whenever there is a new
+    # -- clint, the handler is called
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        print("")
+        print("Stoped by the user")
+        httpd.server_close()

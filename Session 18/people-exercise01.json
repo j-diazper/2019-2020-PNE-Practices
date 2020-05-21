@@ -1,6 +1,4 @@
-
-[
-  {
+ {
     "Firstname": "Troll",
     "Lastname": "Face",
     "age": 20,
@@ -29,4 +27,3 @@
       {"number": "88778", "type": "fornite"}
   ]
   }
-]

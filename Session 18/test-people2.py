@@ -11,7 +11,6 @@ person = json.loads(jsonstring)
 # associated to the fields 'Firstname', 'Lastname' and 'age'
 
 # Print the information on the console, in colors
-print()
 print("Name: ", end="")
 print(person['Firstname'], person['Lastname'])
 print("Age: ",end="")
@@ -26,5 +25,5 @@ print(len(phoneNumbers))
 
 # Print all the phone numbers
 for i, num in enumerate(phoneNumbers):
-    print("  Phone {}:".format(i), end='')
+    print("Phone {}:".format(i), end='')
     print(num)

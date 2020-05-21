@@ -111,7 +111,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                content_json = json.loads(content_json)
                kdata = content_json["karyotype"]
                for chromo in kdata:
-                   print(chromo)
+
                    content += f"""<p> - {chromo} </p>"""
                cod = 200
                content += f"""<a href="/">Index </a></body></html>"""
