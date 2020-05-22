@@ -270,7 +270,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                             </head>
                             <body>
                             <h2> Chromosome length</h2>
-                            <p>The lenght of the chromosome {chromosome} from {specie} is :{length}</p>
+                            <meta charset = "utf-8" >
+                            <title> Chromosome length </title >
+                            <p>The lenght of the chromosome {chromosome} from {specie} is : </p>
+                            <p> {length}</p>
                             <a href="/">Main page</a></body></html>"""
                             code = 200
                 # If we got here everything has gone correctly

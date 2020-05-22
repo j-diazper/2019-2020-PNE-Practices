@@ -1,4 +1,9 @@
-Basic Level Report
+Medium Level Report
+This report evaluates the performance of the program new operations ( Medium Level) and also the correct functioning of
+the operations. In order to check this I performed the same tests that for the basic level
+Basic Level Report. We start with them:
+
+Basic Level reconsidering new additions:
 ====================
 
 ---> listSpecies endpoint
@@ -415,7 +420,310 @@ http://127.0.0.1:8080/chromosomeLength?Specie=&Chromosome=
 </body>
 </html>
 ------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+
+Now we test the new additions
+
+---> geneSeq endpoint
+
+TEST 1:
+
+* Input:
+
+http://127.0.0.1:8080/geneSeq?Gene=FRAT1
+
+*Output:
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset = "utf-8"
+    <title> Gene Sequence </title>
+</head><p> The sequence of gene FRAT1 is:  </p>
+<p>CGGCTCCCGCGGCTGCAGGCGCGCGGCTAGAGTGCCTGGCGGGCTCCGGCTTCCGCGTCCGCCCCGGCCCCGGTCCAGACTTAGTCTTCAGCTCCGCGCCCGCTCCGCCGCGGCCCACCGCGCCCGCCGGCAGCCGAGCCCCCAGCGACGCCCGCACAGCTCCGGGTGCCCAGACAGGGGGCCATGCCGTGCCGGAGGGAGGAGGAAGAGGAAGCCGGCGAGGAGGCGGAGGGGGAGGAAGAGGAGGAGGACAGCTTCCTCCTACTGCAGCAGTCAGTGGCGCTGGGCAGCTCGGGCGAGGTGGACCGGCTGGTGGCCCAGATCGGCGAGACGCTGCAGCTGGACGCGGCGCAGCACAGCCCGGCCTCGCCGTGCGGGCCCCCGGGGGCGCCGCTGCGGGCCCCGGGGCCCCTGGCTGCGGCGGTGCCGGCGGACAAGGCCAGGTCCCCGGCGGTGCCGCTGCTGCTGCCGCCCGCGTTGGCGGAGACTGTGGGCCCGGCGCCCCCTGGGGTCCTGCGCTGCGCCCTGGGGGACCGCGGCCGCGTGCGGGGCCGCGCTGCGCCCTACTGCGTGGCCGAGCTCGCCACAGGCCCCAGCGCGCTGTCCCCACTGCCCCCTCAGGCCGACCTTGATGGGCCTCCGGGAGCTGGCAAGCAGGGCATCCCGCAGCCGCTGTCGGGTCCGTGCCGGCGAGGATGGCTCCGGGGCGCCGCCGCCTCCCGCCGCCTGCAGCAGCGACGCGGGTCCCAACCAGAAACCCGCACAGGCGACGACGACCCGCACCGGCTTCTGCAGCAGCTAGTGCTCTCTGGAAACCTCATCAAGGAGGCCGTGCGAAGGCTTCATTCGCGACGGCTGCAGTTACGTGCAAAGCTTCCCCAACGCCCGCTCCTGGGACCTCTGTCGGCCCCGGTGCATGAACCCCCTTCGCCTCGCAGCCCTCGCGCGGCCTGCAGTGACCCTGGCGCCTCCGGGAGGGCGCAGCTCAGAACTGGCGACGGCGTTCTTGTGCCTGGCAGCTAACACGCCCGGGGTGGCCACAGCGCCAGCCTCAGACTGGAGGGCAAGGGGTTCCCTTGAGGGCTGCAGTTCTACTCAGGCTGGTGGAGAACTCTGGCTTTTGGAAGCGAGAGTAAAAAGCTAATGACGAGGAACCGAAAAATCGCGAGTGTTTCGCGGGTAACTGGGGTTGAGGGCCAAAATATTTGGAATGAAGGACTTTGGCCCTATTTAAGGCAGATTTTACAGAGCGCACCTCAAACGTACAAGTCAGTAGGACTCCTTATTTGGCGTGACCCGACCTGGCCGCGGAGCCTGCATTTCCTCGCAGCCTCTCAGTGCCCTCCAGCCCCGCGACCATGTGGCCACAATCCACGCTTCTCCGGATCGCGGTGCGCCGGAACCACGGAGGATGATGCCAGTTACTTGCTTTACCTTTTCAGGGCTGGCTCCTGATCCACTTTGGGGGAGGAGAACATGAGTAGATAATTTCAGGGTGCAGCCCAATCTGCCAGACTTAAAAAAACCATCTTGTGTCTTTGGAGGTGCTGCTTAATACCAAACATGCGGTGCCATGAAGGGACCCTTTGGGGGTTGAATAGGAGTTAACCCCTGCGCTCTCTTTGCAACTGTCTCTCTTCTCAGAGTGGTGGGGGAAGGCTGTACGACACGGGTGGGGAAAGGAGGTGGGGGCGGGGAGTATTGAATGGTGGTGGAAGGGTAGAGAGGCGCGGAGTGAACCCCACGCCCTGTCTAAAGTGTATTTTCAGAGCCGGCCCGCCTCTCCTCGGTTCAAGGTCACTGTTTCCTGGGCACGCACTGGGTTGCGGGACAGAGTAGCCAGGTTCTGCCGGTGCTCGGAGAAGAGCGCAGTGTTTTGCAAGTGCTGGAGTCTCCTGAGGACACGCGCGTCGCCGCCACCGCGGGTGTGGGAAAGCGCGGACGTGCTGGGCGGCTGTGCTTCGGTAGGCGACCACCGCCCCTGGCCGCGCTCCGGGCTTTCACGGAAACTCCCGAGACCGGGCCCTGGGTTCCTCCTCTCCTACTCGGCTCTGCAGTCCTACTCAAGCGGGTGGCTCTGGGATCCTGGGGGCCTGGGTTGGGGGCTAGGGAGACGCCATGTGATGGACACTCCAGGGACACACAGCCTAGCACAGCAGCTTATAATGGGCTCTCCGGGGCCATTTGCAATAACAGCTGCAATTCCCTGGATAGACGAGTTGATTTCCTCCCTCTGCCCCTCCCCCAGCCATGCCAGCTGGCCTTTGTAAGTGCAGGAAACCGAGTAGAAAATGTGACCCTCCAAATGGAGAAGCTGCAGGCTTTGCCATTGTGAACCATGGTGAAGTGCTTGGAACATACTGTTCACTCACTCTAAAGGCGCTGAGACTGTGCTGTTGTTCTCGTTTTTATAGTCAATGGCTTGTTCATCATCCAGATGTGGCTACTGACATATCTACACTTCGCACCGGAGTGTCTGGAATTGTGGCTATCCTGATTATAGGATTTTAACTTAACTGAAATGCCTGCTTTGAATAAATGTGTTGGGTTTTTTGTTTGGTTTTATTTTATACTTGCCATCAGTGAAAAAGATGTACAGAACACATTTCTCTGATCTCCATAAACATGAAAACACTTGAAATCTC</p>
+<a href="/">Main page</a>
+</body>
+</html>
+------------------------------------------------------------------------------------------------------------------------
+
+TEST 2: When we introduce a gen name that is not in ensembl database
+
+* Input:
+
+http://127.0.0.1:8080/geneSeq?Gene=coronavirus
+
+*Output:
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>Error</title>
+</head>
+<body style="background-color: red;">
+<h1>ERROR</h1>
+<p>Resource not available</p>
+<p></p>
+<a href="http://127.0.0.1:8080/">Main Page </a>
+</body>
+</html>
+------------------------------------------------------------------------------------------------------------------------
+
+TEST 3: When we just leave it in blank
+
+* Input:
+
+http://127.0.0.1:8080/geneSeq?Gene=
+
+*Output:
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>Error</title>
+</head>
+<body style="background-color: red;">
+<h1>ERROR</h1>
+<p>Resource not available</p>
+<p></p>
+<a href="http://127.0.0.1:8080/">Main Page </a>
+</body>
+</html>
+------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+
+---> geneInfo endpoint
+
+TEST 1:
+
+* Input:
+
+http://127.0.0.1:8080/geneInfo?Gene=FRAT1
+
+*Output:
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset = "utf-8"
+    <title> Gene Information</title>
+</head><p> The information of gene FRAT1 is:  </p><p> The gene starts at: 97319271 </p><p> The gene ends at: 97321915 </p>
+<p> The gene length is: 2644</p>
+<p> The gene id is at: ENSG00000165879 </p> <p> The gene is on chromosome: 10 </p>
+<a href="/">Main page</a></body></html>
+------------------------------------------------------------------------------------------------------------------------
+
+TEST 2: When we introduce a gen name that is not in ensembl database
+
+* Input:
+
+http://127.0.0.1:8080/geneInfo?Gene=coronavirus
+
+*Output:
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+    <meta charset="utf-8">
+<title>Error</title>
+</head>
+<body style="background-color: red;">
+<h1>ERROR</h1>
+<p>Resource not available</p>
+<p></p>
+<a href="http://127.0.0.1:8080/">Main Page </a>
+</body>
+</html>
+------------------------------------------------------------------------------------------------------------------------
+
+TEST 3: When we just leave it in blank
+
+* Input:
+
+http://127.0.0.1:8080/geneSeq?Gene=
+
+*Output:
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+    <title>Error</title>
+    </head>
+<body style="background-color: red;">
+<h1>ERROR</h1>
+<p>Resource not available</p>
+<p></p>
+<a href="http://127.0.0.1:8080/">Main Page </a>
+</body>
+</html>
+------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
+
+---> geneCalc endpoint
+
+TEST 1:
+
+* Input:
+
+http://127.0.0.1:8080/geneCalc?Gene=ADA
+
+*Output:
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset = "utf-8"
+    <title> Gene Calculations</title>
+</head><p> The length of gene ADA is: 32712 </p><p> A : 7178 (21.94%) </p><p> C : 8721 (26.66%) </p>
+<p> G : 8768 (26.8%) </p><p> T : 8045 (24.59%) </p><a href="/">Main page</a></body></html>
+------------------------------------------------------------------------------------------------------------------------
+
+TEST 2: When we introduce a gen name that is not in ensembl database
+
+* Input:
+
+http://127.0.0.1:8080/geneCalc?Gene=coronavirus
+
+*Output:
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body style="background-color: red;">
+<h1>ERROR</h1>
+<p>Resource not available</p>
+<p></p>
+<a href="http://127.0.0.1:8080/">Main Page </a>
+</body>
+</html>
+------------------------------------------------------------------------------------------------------------------------
+
+TEST 3: When we just leave it in blank
+
+* Input:
+
+http://127.0.0.1:8080/geneCalc?Gene=
+
+*Output:
 
 
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body style="background-color: red;">
+<h1>ERROR</h1>
+<p>Resource not available</p>
+<p></p>
+<a href="http://127.0.0.1:8080/">Main Page </a>
+</body>
+</html>
+------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
 
+---> geneList endpoint
 
+TEST 1:
+
+* Input:
+
+http://127.0.0.1:8080/geneList?Chromosome=1&Start=0&End=30000
+
+*Output:
+
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset = "utf-8"
+    <title> Gene List</title>
+</head><p> List of genes of the chromosome 1, which goes from 0 to 30000 </p>
+<p>DDX11L1</p><p>WASH7P</p><p>MIR6859-1</p><p>MIR1302-2HG</p><a href="/">Main page</a></body></html>
+------------------------------------------------------------------------------------------------------------------------
+
+TEST 2: When we introduce a chromosome name that is not in ensembl database
+
+* Input:
+
+http://127.0.0.1:8080/geneList?Chromosome=coronavirus&Start=0&End=30000
+
+*Output:
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body style="background-color: red;">
+<h1>ERROR</h1>
+<p>Resource not available</p>
+<p></p>
+<a href="http://127.0.0.1:8080/">Main Page </a>
+</body>
+</html>
+------------------------------------------------------------------------------------------------------------------------
+
+TEST 3: When we put an end value that exceeds the length of the chromosome
+
+* Input:
+
+http://127.0.0.1:8080/geneList?Chromosome=1&Start=0&End=9999999999
+
+*Output:
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body style="background-color: red;">
+<h1>ERROR</h1>
+<p>Resource not available</p>
+<p></p>
+<a href="http://127.0.0.1:8080/">Main Page </a>
+</body>
+</html>
+------------------------------------------------------------------------------------------------------------------------
+TEST 4: When we put float values at start or end
+
+* Input:
+
+view-source:http://127.0.0.1:8080/geneList?Chromosome=1&Start=0.5&End=30000.5
+
+*Output:
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body style="background-color: red;">
+<h1>ERROR</h1>
+<p>Resource not available</p>
+<p></p>
+<a href="http://127.0.0.1:8080/">Main Page </a>
+</body>
+</html>
+------------------------------------------------------------------------------------------------------------------------
+TEST 4: When we introduce a string at the end or start
+
+* Input:
+
+view-source:127.0.0.1:8080/geneList?Chromosome=1&Start=corona&End=virus
+
+*Output:
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body style="background-color: red;">
+<h1>ERROR</h1>
+<p>Resource not available</p>
+<p></p>
+<a href="http://127.0.0.1:8080/">Main Page </a>
+</body>
+</html>
