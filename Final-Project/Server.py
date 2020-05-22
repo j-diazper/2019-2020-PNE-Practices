@@ -145,7 +145,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                     contents += f"""<a href="/">Main page</a></body></html>"""
                     code = 200
 
-                    # We just add the final info to our html to be given us back, if we get up to here everything has
+                    # We just add the final info to our html to be given us back, if we got here everything has
                     # gone correctly
 
             # In this option we are asked to introduce the name of a specie of the ensembl data base, the program should
@@ -203,238 +203,400 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 for chromosome in karyotype_data:
                     contents += f"""<p> - {chromosome} </p>"""
 
-                # We just add an option to return to the index and our html is now completed,if we get up to here
+                # We just add an option to return to the index and our html is now completed,if we got here
                 # everything has gone correctly
                 contents += f"""<a href="/">Main page </a></body></html>"""
                 code = 200
 
+            # In this option we are asked to introduce the name of a specie of the ensembl data base and the name of one
+            # of its chromosomes, the program should give us back the length of the chromosome
 
             elif action == "/chromosomeLength":
-                # We get the arguments that go after the ? symbol
+
+                # We get the arguments that go after the ? in the path, Specie = "whatever input we introduce" and
+                # Chromosome = "whatever input we introduce"
                 pair = arguments[1]
-                # We have a couple of elements, we need the sequence that we previously wrote and the operation to perform
-                # that we previously selected
                 pairs = pair.split('&')
+
+                # We have two couple of elements, split each by =. The values that will be used are specie and
+                # chromosome that we introduced
                 specie_name, specie = pairs[0].split("=")
                 chromosome_index, chromosome = pairs[1].split("=")
                 specie = specie
-                contents = f"""<!DOCTYPE html>
-                <html lang = "en">
-                <head>
-                 <meta charset = "utf-8" >
-                 <title>ERROR</title >
-                </head>
-                <body>
-                <p>ERROR INVALID VALUE. Introduce an integer value for chromosome</p>
-                <a href="/">Main page</a></body></html>"""
+
+                # We set the main elements that will be used to get the list: ensembl server, endpoint that was
+                # previously searched for this function and parameters
                 server = 'rest.ensembl.org'
-                endpoint = 'info/assembly/'
+                endpoint = f'info/assembly/'
                 parameters = '?content-type=application/json'
-                conn = http.client.HTTPConnection(server)
                 request = endpoint + specie + parameters
+
+                # Connect with the server
+                conn = http.client.HTTPConnection(server)
+
+                # Send the request message, using the GET method. We are
+                # requesting the main page (/)
                 try:
                     conn.request("GET", request)
                 except ConnectionRefusedError:
                     print("ERROR! Cannot connect to the Server")
                     exit()
-                # -- Read the response message from the server
+
+                # Read the response message from the server
                 response = conn.getresponse()
-                # -- Read the response's body
+
+                # Read the response's body
                 body = response.read().decode()
-                body = json.loads(body)
-                chromosome_data = body["top_level_region"]
-                for chromo in chromosome_data:
-                    if chromo["name"] == str(chromosome):
-                        length = chromo["length"]
-                        contents = f"""<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title> Length Chromosome</title >
-                            </head ><body><h2> The length of the chromosome is: {length}</h2><a href="/"> Main page</a"""
-                code = 200
+
+                # Create a variable with the data, form the JSON received. We get the key that interest us, chromosomic
+                # data
+                chromosomic_data = json.loads(body)
+
+                # As it was researched at the Api of ensembl this will give us a superdictionary, we are looking for
+                # specific elements that are inside key top_level_region, we will iterate through
+                for chromo in chromosomic_data["top_level_region"]:
+
+                    # The "sub"key we are looking for is name, we compare with the chromosome we introduced and if we
+                    # get a coincidence we will get the value of key length of that specific chromosome
+                        if chromosome == chromo["name"]:
+
+                            # Once we have the value we will directly create the html with the info, the aim of this is
+                            # to deal with possible errors in an easy way
+                            length = chromo["length"]
+                            contents = f"""<!DOCTYPE html><html lang = "en">
+                            <head>
+                            <meta charset = "utf-8" >
+                            <title> Length Chromosome</title >
+                            </head>
+                            <body>
+                            <h2> Chromosome length</h2>
+                            <p>The lenght of the chromosome {chromosome} from {specie} is :{length}</p>
+                            <a href="/">Main page</a></body></html>"""
+                            code = 200
+                # If we got here everything has gone correctly
+
+            # This is the start of the medium level. The first option asks us to introduce the name of a gen of the
+            # ensembl database and get back its  genomic sequence
             elif action == "/geneSeq":
-                contents= f"""<!DOCTYPE html>
+
+                # This is the basic structure of the html page that we will get, it is incomplete...
+                contents = f"""<!DOCTYPE html>
                 <html lang = "en">            
                 <head>  
                 <meta charset = "utf-8"
                 <title> Gene Sequence </title>
                 </head>"""
-                # We get the arguments that go after the ? symbol
+
+                # We get the arguments that go after the ? in the path, Gen name = "whatever input we introduce"
                 get_value = arguments[1]
-                # We get the seq index, after we have a couple of elements, the one which we need is the value of the index
-                # position of the sequence
-                seq_n = get_value.split('?')
-                seq_name, name_seq = seq_n[0].split("=")
-                contents += f"""<p> The sequence of gene {name_seq} is:  </p>"""
+                pair = get_value.split('?')
+
+                # We have a couple of elements, split each by =. The value that will be used is the name of the gen
+                gen, name_gene = pair[0].split("=")
+
+                # Just addition to html response...
+                contents += f"""<p> The sequence of gene {name_gene} is:  </p>"""
+
+                # We set the main elements that will be used to get the list: ensembl server, endpoint that was
+                # previously searched for this function and parameters
                 server = 'rest.ensembl.org'
                 first_endpoint = "xrefs/symbol/homo_sapiens/"
                 parameters = '?content-type=application/json'
-                first_request = first_endpoint + name_seq + parameters
+                first_request = first_endpoint + name_gene + parameters
+
+                # Connect with the server
                 conn = http.client.HTTPConnection(server)
+
+                # Send the request message, using the GET method. We are
+                # requesting the main page (/)
                 try:
                     conn.request("GET", first_request)
                 except ConnectionRefusedError:
                     print("ERROR! Cannot connect to the Server")
                     exit()
+
+                # Read the response message from the server
                 response = conn.getresponse()
+
                 # -- Read the response's body
                 body = response.read().decode()
+
+                # Create a variable with the data, form the JSON received. We get the first element and the key of
+                # dictionary that interest us, id
                 body = json.loads(body)
                 id_gene = body[0]
                 id_gene = id_gene["id"]
 
+                # Once we have the id (how it appears in ensemble database) of the gen that we want we perform a second
+                # connection, now for getting the sequence that gene in concrete. We use the endpoint previously
+                # researched in the ensembl api
+
                 second_endpoint = "sequence/id/"
                 second_request = second_endpoint + id_gene + parameters
+
+                # Send the request message, using the GET method. We are
+                # requesting the main page (/)
                 try:
                     conn.request("GET", second_request)
                 except ConnectionRefusedError:
                     print("ERROR! Cannot connect to the Server")
                     exit()
+
+                # Read the second response message from the server
                 response2 = conn.getresponse()
-                # -- Read the response's body
+
+                # Read the second response's body
                 body2 = response2.read().decode()
+
+                # Create a variable with the data, form the second JSON received. We get the first element and the key
+                # of dictionary that interest us, seq
                 body2 = json.loads(body2)
+
+                # We get the value associated to that key, the sequence of the gen. We add it to our html page
                 sequence = body2["seq"]
                 contents += f"""<p>{sequence}</p><a href="/">Main page</a></body></html>"""
                 code = 200
+                # If we got here everything has gone correctly
+
+            # In this option we are asked to introduce a gene and get specific info about it
+
             elif action == "/geneInfo":
+
+                # This is the basic structure of the html page that we will get, it is incomplete...
                 contents = f"""<!DOCTYPE html>
-                    <html lang = "en">            
-                    <head>  
-                    <meta charset = "utf-8"
-                    <title> Gene Information</title>
-                    </head>"""
-                # We get the arguments that go after the ? symbol
+                <html lang = "en">            
+                <head>  
+                <meta charset = "utf-8"
+                <title> Gene Information</title>
+                </head>"""
+
+                # We get the arguments that go after the ? in the path, Gen name = "whatever input we introduce"
                 get_value = arguments[1]
-                # We get the seq index, after we have a couple of elements, the one which we need is the value of the index
-                # position of the sequence
-                seq_n = get_value.split('?')
-                seq_name, name_seq = seq_n[0].split("=")
-                contents += f"""<p> The information of gene {name_seq} is:  </p>"""
+                pair = get_value.split('?')
+
+                # We have a couple of elements, split each by =. The value that will be used is the name of the gen
+                gen, name_gene = pair[0].split("=")
+
+                # Just addition to html response...
+                contents += f"""<p> The information of gene {name_gene} is:  </p>"""
+
+                # We set the main elements that will be used to get the list: ensembl server, endpoint that was
+                # previously searched for this function and parameters
                 server = 'rest.ensembl.org'
                 first_endpoint = "xrefs/symbol/homo_sapiens/"
                 parameters = '?content-type=application/json'
-                first_request = first_endpoint + name_seq + parameters
+                first_request = first_endpoint + name_gene + parameters
+
+                # Connect to server
                 conn = http.client.HTTPConnection(server)
+
+                # Send the request message, using the GET method. We are
+                # requesting the main page (/)
                 try:
                     conn.request("GET", first_request)
                 except ConnectionRefusedError:
                     print("ERROR! Cannot connect to the Server")
                     exit()
+
+                # Read the response message from the server
                 response = conn.getresponse()
-                # -- Read the response's body
+
+                # Read the response's body
                 body = response.read().decode()
+
+                # Create a variable with the data, form the JSON received. We get the first element and the key of
+                # dictionary that interest us, id
                 body = json.loads(body)
                 id_gene = body[0]
                 id_gene = id_gene["id"]
+
+                # Once we have the id (how it appears in ensemble database) of the gen that we want we perform a second
+                # connection, now for getting the info that gene in concrete. We use the endpoint previously researched
+                # in the ensembl api
                 second_endpoint = "lookup/id/"
                 second_request = second_endpoint + id_gene + parameters
+
+                # Send the request message, using the GET method. We are
+                # requesting the main page (/)
                 try:
                     conn.request("GET", second_request)
                 except ConnectionRefusedError:
                     print("ERROR! Cannot connect to the Server")
                     exit()
+
+                # Read the second response message from the server
                 response2 = conn.getresponse()
-                # -- Read the response's body
+
+                # Read the second response's body
                 body2 = response2.read().decode()
+
+                # Create a variable with the data, form the JSON received. We get diferent values associated to the
+                # keys that contain the info we are looking for
                 body2 = json.loads(body2)
                 length = int(body2["end"]) - int(body2["start"])
+
+                # Once we have all the info collected, just complete the html response
                 contents += f"""<p> The gene starts at: {body2["start"]} </p><p> The gene ends at: {body2["end"]} </p>
                 <p> The gene length is: {length}</p>
                 <p> The gene id is at: {id_gene} </p> <p> The gene is on chromosome: {body2["seq_region_name"]} </p>
                 <a href="/">Main page</a></body></html>"""
                 code = 200
+                # If we got here everything has gone correctly
+
+            # In this option we are asked to introduce a gene and perform some calculations with it, we will need Seq
+            # from Seq1
+
             elif action == "/geneCalc":
+
+                # This is the basic structure of the html page that we will get, it is incomplete...
                 contents = f"""<!DOCTYPE html>
-                        <html lang = "en">            
-                        <head>  
-                        <meta charset = "utf-8"
-                        <title> Gene Calculations</title>
-                        </head>"""
-                # We get the arguments that go after the ? symbol
+                <html lang = "en">            
+                <head>  
+                <meta charset = "utf-8"
+                <title> Gene Calculations</title>
+                </head>"""
+
+                # We get the arguments that go after the ? in the path, Gen name = "whatever input we introduce"
                 get_value = arguments[1]
-                # We get the seq index, after we have a couple of elements, the one which we need is the value of the index
-                # position of the sequence
-                seq_n = get_value.split('?')
-                seq_name, name_seq = seq_n[0].split("=")
+                pair = get_value.split('?')
+
+                # We have a couple of elements, split each by =. The value that will be used is the name of the gen
+                seq_name, name_seq = pair[0].split("=")
+
+                # We set the main elements that will be used to get the list: ensembl server, endpoint that was
+                # previously searched for this function and parameters
                 server = 'rest.ensembl.org'
                 first_endpoint = "xrefs/symbol/homo_sapiens/"
                 parameters = '?content-type=application/json'
                 first_request = first_endpoint + name_seq + parameters
+
+                # Connect with the server
                 conn = http.client.HTTPConnection(server)
+
+                # Send the request message, using the GET method. We are
+                # requesting the main page (/)
                 try:
                     conn.request("GET", first_request)
                 except ConnectionRefusedError:
                     print("ERROR! Cannot connect to the Server")
                     exit()
+
+                # Read the response message from the server
                 response = conn.getresponse()
-                # -- Read the response's body
+                # Read the response's body
                 body = response.read().decode()
+
+                # Create a variable with the data, form the JSON received. We get the first element and the key of
+                # dictionary that interest us, id
                 body = json.loads(body)
                 id_gene = body[0]
                 id_gene = id_gene["id"]
+
+                # Once we have the id (how it appears in ensemble database) of the gen that we want we perform a second
+                # connection, now for getting the info that gene in concrete. We use the endpoint previously researched
+                # in the ensembl api
                 second_endpoint = "sequence/id/"
                 second_request = second_endpoint + id_gene + parameters
+
+                # Send the request message, using the GET method. We are
+                # requesting the main page (/)
                 try:
                     conn.request("GET", second_request)
                 except ConnectionRefusedError:
                     print("ERROR! Cannot connect to the Server")
                     exit()
+
+                # Read the second response message from the server
                 response2 = conn.getresponse()
-                # -- Read the response's body
+
+                # Read the second response's body
                 body2 = response2.read().decode()
                 body2 = json.loads(body2)
+
+                # Create a variable with the data, form the JSON received. We get  value associated to the
+                # key that contain the info we are looking for, the gen sequence. We convert it into an object of our
+                # class Seq in order to perform the calculations with it
                 sequence = Seq(body2["seq"])
-                contents += f"""<p> The length of gene {name_seq} is: {sequence.len()} </p>"""
                 list_of_bases = ["A", "C", "G", "T"]
+
+                # Just addition to html response...
+                contents += f"""<p> The length of gene {name_seq} is: {sequence.len()} </p>"""
+
+                # We perform some calculations with the functions of Seq and add them to the html response to complete
                 for base in list_of_bases:
-                    perc_base = round(sequence.count_base(base) * 100 / sequence.len(),2)
+                    perc_base = round(sequence.count_base(base) * 100 / sequence.len(), 2)
                     contents += f"""<p> {base} : {sequence.count_base(base)} ({perc_base}%) </p>"""
                 contents += f"""<a href="/">Main page</a></body></html>"""
                 code = 200
+                # If we got here everything has gone correctly
+
+            # In this last option we are asked to introduce a chromosome, an initial and final position within it and
+            # get the list of genes that compose it located within thi interval
 
             elif action == "/geneList":
+
+                # This is the basic structure of the html page that we will get, it is incomplete...
                 contents = f"""<!DOCTYPE html>
                   <html lang = "en">            
                   <head>  
                   <meta charset = "utf-8"
                   <title> Gene List</title>
                   </head>"""
-                endpoint = "overlap/region/human/"
+
+                # We get the arguments that go after the ? in the path, Chromosome  name = "whatever input we introduce"
+                # Start = "whatever input we introduce" and End = "whatever input we introduce". We split this 3 couples
+                # by &
                 get_value = arguments[1]
-                # We get the seq index, after we have a couple of elements, the one which we need is the value of the index
-                # position of the sequence
                 pairs = get_value.split('&')
-                chromo_value, chromo = pairs[0].split("=")
+
+                # We have a couple of elements, split each by =. The value that will be used is the name of the gen
+                chromosome_name, chromosome = pairs[0].split("=")
                 chromosome_start, start = pairs[1].split("=")
                 chromosome_end, end = pairs[2].split("=")
-                contents += f"""<p> List of genes of the chromosome {chromo}, which goes from {start} to {end} </p>"""
-                server = 'rest.ensembl.org'
-                parameters = '?feature=gene;content-type=application/json'
-                request = endpoint + chromo + ":" + start + "-" + end + parameters
 
+                # Just addition to html response...
+                contents += f"""<p> List of genes of the chromosome {chromosome}, which goes from {start} to {end} </p>
+                """
+
+                # We set the main elements that will be used to get the list: ensembl server, endpoint that was
+                # previously searched for this function and parameters
+                server = 'rest.ensembl.org'
+                parameters = "?feature=gene;content-type=application/json"
+                endpoint = "overlap/region/human/"
+                request = endpoint + chromosome + ":" + start + "-" + end + parameters
+
+                # Connect with the server
                 conn = http.client.HTTPConnection(server)
+
+                # Send the request message, using the GET method. We are
+                # requesting the main page (/)
                 try:
                     conn.request("GET", request)
                 except ConnectionRefusedError:
                     print("ERROR! Cannot connect to the Server")
                     exit()
+
+                # Read the response message from the server
                 response = conn.getresponse()
-                # -- Read the response's body
+
+                # Read the response's body
                 body = response.read().decode("utf-8")
+
+                # Read the response's body
                 body = json.loads(body)
+
+                # We iterate through the dictionary and get the values associated with the key we are interested in
                 for element in body:
-                    print(element["external_name"])
+
+                    # We add this info and our html response is now complete
                     contents += f"""<p>{element["external_name"]}</p>"""
                 contents += f"""<a href="/">Main page</a></body></html>"""
                 code = 200
 
-
-
-
-
-#97321915  97319271
-
-        except (KeyError,ValueError,IndexError,TypeError):
+        # With except we will be able to deal with whatever possible error, such as introducing invalid inputs or inputs
+        # that don´t appear at the database, exceed the number of possible items of a list...
+        except (KeyError, ValueError, IndexError, TypeError):
             contents = Path('error.html').read_text()
-
 
         # Generating the response message
         self.send_response(code)  # -- Status line: OK!

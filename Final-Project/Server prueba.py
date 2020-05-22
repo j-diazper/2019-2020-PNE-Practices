@@ -145,6 +145,50 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                            content = f"""<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title> Length Chromosome</title >
                            </head ><body><h2> The length of the chromosome is: <p> - {l} </p><a href="/">Index </a></body></html>"""
                            cod = 200
+           elif option == "/geneList":  # Return the names of the genes located in the chromosome "chromo" from the start to end positions
+
+               contents = f"""<!DOCTYPE html>
+                                         <html lang = "en">            
+                                         <head>  
+                                         <meta charset = "utf-8"
+                                         <title> Gene List</title>
+                                         </head>"""
+
+               # We get the arguments that go after the ?
+               get_value = arguments[1]
+
+               # We get the seq index, after we have a couple of elements, the one which we need is the value of the index
+               # position of the sequence
+               pairs = get_value.split('&')  # splits by the &
+               chromo_value, chromo = pairs[0].split("=")  # having pair[0] as the species name
+               chromosome_start, start = pairs[1].split("=")  # chromosome start (pair[1] column)
+               chromosome_end, end = pairs[2].split("=")  # chromosome end (pair[2] column)
+
+               contents += f"""<p> List of genes of the chromosome {chromo}, which goes from {start} to {end} </p>"""
+               server = 'rest.ensembl.org'
+               endpoint = "overlap/region/human/"  # first endpoint --> human
+               parameters = '?feature=gene;content-type=application/json'
+               request = endpoint + chromo + ":" + start + "-" + end + parameters  # request line
+               conn = http.client.HTTPConnection(server)
+               try:
+                   conn.request("GET", request)  # connection request
+
+               except ConnectionRefusedError:
+                   print("ERROR! Cannot connect to the Server")  # exception for connection error
+                   exit()
+
+               # ----------------------Main program of geneList------------------------
+               # -- Read the response message from the server
+               response = conn.getresponse()
+               # -- Read the response's body
+               body = response.read().decode("utf-8")  # utf_8 to admit all characters in the response
+               body = json.loads(body)
+
+               for element in body:  # iteration to print all the elements of the chromosome within the chosen limits
+                   print(element["external_name"])
+                   contents += f"""<p>{element["external_name"]}</p>"""
+               contents += f"""<a href="/">Main page</a></body></html>"""
+
 
        except (KeyError, ValueError, IndexError,TypeError):
                content = Path('error.html').read_text()
