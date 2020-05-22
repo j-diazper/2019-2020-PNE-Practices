@@ -2,14 +2,19 @@ import http.server
 import socketserver
 from pathlib import Path
 from Seq1 import Seq
+
 # Port
 PORT = 8080
+
 # -- This is for preventing the error: "Port already in use"
 socketserver.TCPServer.allow_reuse_address = True
+
 # List of sequences for Get option
 Seq_List = ["AGATCGCGCCACTTCACTGCAGCCTCCGCGAAAGAGCGAAACTCCGTCTCA","TCCTTTCACTCCCAGCTCCCTGGAGTCTCTCACGTAGAATGTCCTCTCCACCCCCACCCA","CAGGAGGCTGAGGCGGGAGGATCGCTTGAGCCCAGGAGGTTGAGGCTGCAGTGAGGTGTG","CACTTGCAAATCATGCAGTTTATGTAGCATTTTCATTTAACACCTTCTCCCAACCATCTC","CTATGCTAACCCTGTGAACCGTTGCTCGCTTCTCCTTGACATCTGACGGCCTGGCCTTCT"""]
 Folder = r"C:\\Users\\jesus.diaz\\PycharmProjects\\2019-2020-PNE-Practices\\Practice 1\\P1\\"
 txt = ".txt"
+
+
 # Class with our Handler. It is a called derived from BaseHTTPRequestHandler
 # It means that our class inheritates all his methods and properties
 
@@ -20,6 +25,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         is called whenever the client invokes the GET method
         in the HTTP protocol request"""
         print(self.requestline)
+
         # We get the first request line and then the path, goes after /. We get the arguments that go after the ? symbol
         req_line = self.requestline.split(' ')
         path = req_line[1]
@@ -28,6 +34,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         action = arguments[0]
         contents = Path('error.html').read_text()
         code = 200
+
         # First we open index.html if we don´t specify any action, this is the Index menu
         if action == "/":
             contents = Path('index.html').read_text()
@@ -37,45 +44,56 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             <body><h2> PING OK!</h2><p> The SEQ2 server in running.... </p><a href="/">Main page</a></body></html>"""
 
         elif action == "/get":
+
             # We get the arguments that go after the ? symbol
             get_value = arguments[1]
+
             # We get the seq index, after we have a couple of elements, the one which we need is the value of the index
             # position of the sequence
             seq_n = get_value.split('?')
             seq_name, index = seq_n[0].split("=")
             index = int(index)
+
             # Once we have the index we can get our sequence from Seq_List
             seq = Seq_List[index]
+
             # This is the html code that will show up once we are getting back the sequence we selected
             contents = f"""<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title> Get </title ></head >
             <body><h2> Sequence number {index}</h2><p> {seq} </p><a href="/">Main page</a></body></html>"""
 
         elif action == "/gene":
+
             # We get the arguments that go after the ? symbol
             gene_value = arguments[1]
+
             # After we have a couple of elements, the one which we need is the name of the gene, for reading the file
             # using the specific function from Seq class
             pairs = gene_value.split('&')
             gene_name, gene = pairs[0].split("=")
+
             # We call Seq class and read the file correspondent to the gene variable, we read the file, get the seq and
             # convert into string
             s = Seq()
             filename = Folder + gene + txt
             seq = Seq(s.read_fasta(filename))
             gene_seq = str(seq)
+
             # This is the html code that will show up once we are getting back the sequence we selected
             contents = f"""<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title> Gene </title ></head>
             <body><h2> Gene: {gene}</h2><textarea readonly rows="20" cols="80"> {gene_seq} </textarea><br><br>
             <a href="/">Main page</a></body></html>"""
 
         elif action == "/operation":
+
             # We get the arguments that go after the ? symbol
             pair = arguments[1]
+
             # We have a couple of elements, we need the sequence that we previously wrote and the operation to perform
             # that we previously selected
             pairs = pair.split('&')
             seq_name, seq = pairs[0].split("=")
             op_name, op = pairs[1].split("=")
+
             # Using Seq class we transform the sequence we introduced. According to the operation we selected we will
             # use one function of the class or other
             seq = Seq(seq)
@@ -99,6 +117,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             contents = f"""<!DOCTYPE html><html lang = "en"><head><meta charset = "utf-8" ><title> Operation </title >
             </head ><body><h2> Sequence </h2><p>{seq}</p><h2> Operation: </h2><p>{op}</p><h2> Result: </h2><p>{result}
             </p><br><br><a href="/">Main page</a></body></html>"""
+
         # Generating the response message
         self.send_response(code)  # -- Status line: OK!
 

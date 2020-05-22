@@ -1,11 +1,13 @@
 from pathlib import Path
+
+
 class Seq:
     """"A  class for representing seq object"""
-    def __init__(self,strbases=None):
+    def __init__(self, strbases=None):
         can_continue= ""
-        gen_list=["A","C","G","T"]
+        gen_list=["A", "C", "G", "T"]
         self.strbases= strbases
-        if strbases==None:
+        if strbases == None:
             print("NULL Seq created")
             self.strbases="NULL"
         else:
@@ -39,7 +41,8 @@ class Seq:
                 if element == base:
                     count = count + 1
         return count
-    def count(self,base):
+
+    def count(self, base):
         list_of_bases = ["A", "C", "G", "T"]
         value_list=[]
         counter_A = 0
@@ -47,7 +50,7 @@ class Seq:
         counter_G = 0
         counter_T = 0
         for i in self.strbases:
-            if self.strbases=="NULL" or self.strbases=="ERROR":
+            if self.strbases == "NULL" or self.strbases == "ERROR":
                 counter_A = 0
                 counter_C = 0
                 counter_G = 0
@@ -76,14 +79,14 @@ class Seq:
                 dict_1 = dict(zip(list_of_bases, value_list))
                 return dict_1
     def reverse(self):
-        if self.strbases=="NULL" or self.strbases=="ERROR":
+        if self.strbases == "NULL" or self.strbases == "ERROR":
             return self.strbases
         else:
             return self.strbases[::-1]
 
     def complement(self):
         complements = ""
-        if self.strbases=="NULL" or self.strbases=="ERROR":
+        if self.strbases == "NULL" or self.strbases == "ERROR":
             return self.strbases
         else:
             for i in self.strbases:
@@ -94,12 +97,12 @@ class Seq:
                     i = "A"
                     complements = complements + i
                 elif i == "C":
-                    i == "G"
+                    i = "G"
                     complements = complements + i
                 elif i == "G":
-                    i == "C"
+                    i = "C"
                     complements = complements + i
-        return (complements)
+        return complements
 
     def read_fasta(self, filename):
         bodystr = ""
@@ -107,9 +110,9 @@ class Seq:
         lines = file_contents.split('\n')
         body = lines[1:]
         bodystr = bodystr.join(body).replace(" ", "")
-        return (bodystr)
+        return bodystr
 
-    def processing_genes(self,baselist):
+    def processing_genes(self, baselist):
         dict_value = self.count(baselist)
         max_val = max(dict_value, key=dict_value.get)
         return max_val

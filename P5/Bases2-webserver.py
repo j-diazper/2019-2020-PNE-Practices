@@ -2,7 +2,6 @@ import http.server
 import pathlib
 import socketserver
 
-
 # Port
 PORT = 8080
 
@@ -63,11 +62,12 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
         return
 
-
 # ------------------------
 # - Server MAIN program
 # ------------------------
 # -- Set the new handler
+
+
 Handler = TestHandler
 
 # -- Open the socket server

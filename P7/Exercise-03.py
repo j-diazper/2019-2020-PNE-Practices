@@ -26,8 +26,8 @@ except ConnectionRefusedError:
 # -- Read the response message from the server
 response = conn.getresponse()
 
-#status line
-print("Response received!:", response.status, response.reason,"\n")
+# status line
+print("Response received!:", response.status, response.reason, "\n")
 
 # Read the body of response, we will use it in json form
 body = response.read().decode()

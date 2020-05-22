@@ -30,7 +30,7 @@ except ConnectionRefusedError:
 response = conn.getresponse()
 
 # -- Print the status line
-print("Response received!:", response.status, response.reason,"\n")
+print("Response received!:", response.status, response.reason, "\n")
 
 # -- Read the response's body
 body = response.read().decode()
@@ -53,10 +53,10 @@ counter_a = seq.count_base('A')
 counter_g = seq.count_base('G')
 counter_c = seq.count_base('C')
 counter_t = seq.count_base('T')
-perc_a = round(100 * counter_a / length,1)
-perc_g = round(100 * counter_g / length,1)
-perc_c = round(100 * counter_c / length,1)
-perc_t = round(100 * counter_t / length,1)
+perc_a = round(100 * counter_a / length, 1)
+perc_g = round(100 * counter_g / length, 1)
+perc_c = round(100 * counter_c / length, 1)
+perc_t = round(100 * counter_t / length, 1)
 print(f"""Total length: {length} ç
 A: {counter_a} ({perc_a}%)
 G: {counter_g} ({perc_g}%)
@@ -74,4 +74,4 @@ maximum = max(value_list)
 
 # -- Print the base
 print("Most frequent Base", end="")
-print(": ",base_list[value_list.index(maximum)])
+print(": ", base_list[value_list.index(maximum)])

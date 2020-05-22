@@ -560,6 +560,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 chromosome_start, start = pairs[1].split("=")
                 chromosome_end, end = pairs[2].split("=")
 
+                # Just in case we leave start at blank, i will start from 0
+                if start == "":
+                    start = "0"
+
                 # Just addition to html response...
                 contents += f"""<p> List of genes of the chromosome {chromosome}, which goes from {start} to {end} </p>
                 """

@@ -38,7 +38,7 @@ for name in gene_list:
     response = conn.getresponse()
 
     # -- Print the status line
-    print("Response received!:", response.status, response.reason,"\n")
+    print("Response received!:", response.status, response.reason, "\n")
 
     # -- Read the response's body
     body = response.read().decode()
@@ -71,11 +71,11 @@ for name in gene_list:
     print(":", length)
 
     print("A", end="")
-    print(":", counter_a, perc_a,"%")
+    print(":", counter_a, perc_a, "%")
     print("C", end="")
-    print(":", counter_c, perc_c,"%")
+    print(":", counter_c, perc_c, "%")
     print("G", end="")
-    print(":", counter_g, perc_g,"%")
+    print(":", counter_g, perc_g, "%")
     print("T", end="")
     print(":", counter_t, perc_t, "%")
 

@@ -690,7 +690,7 @@ TEST 4: When we put float values at start or end
 
 * Input:
 
-view-source:http://127.0.0.1:8080/geneList?Chromosome=1&Start=0.5&End=30000.5
+http://127.0.0.1:8080/geneList?Chromosome=1&Start=0.5&End=30000.5
 
 *Output:
 <!DOCTYPE html>
@@ -707,13 +707,71 @@ view-source:http://127.0.0.1:8080/geneList?Chromosome=1&Start=0.5&End=30000.5
 </body>
 </html>
 ------------------------------------------------------------------------------------------------------------------------
-TEST 4: When we introduce a string at the end or start
+TEST 5: When we introduce a string at the end or start
 
 * Input:
 
-view-source:127.0.0.1:8080/geneList?Chromosome=1&Start=corona&End=virus
+http://127.0.0.1:8080/geneList?Chromosome=1&Start=corona&End=virus
 
 *Output:
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body style="background-color: red;">
+<h1>ERROR</h1>
+<p>Resource not available</p>
+<p></p>
+<a href="http://127.0.0.1:8080/">Main Page </a>
+</body>
+</html>
+------------------------------------------------------------------------------------------------------------------------
+TEST 6: When we leave start in blank, programmed to count it as starting from 0
+
+* Input:
+
+http://127.0.0.1:8080/geneList?Chromosome=1&Start=&End=30000
+
+*Output:
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset = "utf-8"
+    <title> Gene List</title>
+</head><p> List of genes of the chromosome 1, which goes from 0 to 30000 </p>
+<p>DDX11L1</p><p>WASH7P</p><p>MIR6859-1</p><p>MIR1302-2HG</p><a href="/">Main page</a></body></html>
+------------------------------------------------------------------------------------------------------------------------
+TEST 7: When we leave end in blank...
+
+* Input:
+
+http://127.0.0.1:8080/geneList?Chromosome=1&Start=0&End=
+
+*Output:
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body style="background-color: red;">
+<h1>ERROR</h1>
+<p>Resource not available</p>
+<p></p>
+<a href="http://127.0.0.1:8080/">Main Page </a>
+</body>
+</html>
+------------------------------------------------------------------------------------------------------------------------
+TEST 8: Or when we leave chromosome in blank...
+
+* Input:
+
+http://127.0.0.1:8080/geneList?Chromosome=&Start=0&End=30000
+
+*Output:
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
