@@ -80,7 +80,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
 
                 limit_action, limit_value = limit_input[0].split("=")
 
-                # We try to convert it into an integer to return error page if there is a value error
+                # We try to convert it into an integer to return error page if there is a value error. Also if we leave
+                # it in blank we should get the full list
+                if limit_value == "":
+                    limit_value = "267"
                 limit_value = int(limit_value)
 
                 # Just addition to html response...
