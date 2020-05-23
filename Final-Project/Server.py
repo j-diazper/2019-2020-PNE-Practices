@@ -244,6 +244,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 specie_name, name = pairs[0].split("=")
                 chromosome_index, chromosome = pairs[1].split("=")
                 specie = name.replace("+", "%20")
+                chromosome = chromosome.capitalize()
 
                 # We set the main elements that will be used to get the list: ensembl server, endpoint that was
                 # previously searched for this function and parameters
