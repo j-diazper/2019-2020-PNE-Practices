@@ -85,71 +85,74 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 if limit_value == "":
                     limit_value = "267"
                 limit_value = int(limit_value)
+                if limit_value <= 0:
+                    contents = Path('error.html').read_text()
+                if limit_value > 0:
+                    # Just addition to html response...
+                    contents += f"""<p>The number of species you selected are: {limit_value} </p>"""
 
-                # Just addition to html response...
-                contents += f"""<p>The number of species you selected are: {limit_value} </p>"""
+                    # We set the main elements that will be used to get the list: ensembl server, endpoint that was
+                    # previously searched for this function and parameters
+                    server = 'rest.ensembl.org'
+                    endpoint = 'info/species'
+                    parameters = '?content-type=application/json'
+                    request = endpoint + parameters
 
-                # We set the main elements that will be used to get the list: ensembl server, endpoint that was
-                # previously searched for this function and parameters
-                server = 'rest.ensembl.org'
-                endpoint = 'info/species'
-                parameters = '?content-type=application/json'
-                request = endpoint + parameters
+                    # Connect with the server
+                    conn = http.client.HTTPConnection(server)
 
-                # Connect with the server
-                conn = http.client.HTTPConnection(server)
+                    # Send the request message, using the GET method. We are
+                    # requesting the main page (/)
+                    try:
+                        conn.request("GET", request)
+                    except ConnectionRefusedError:
+                        print("ERROR! Cannot connect to the Server")
+                        exit()
 
-                # Send the request message, using the GET method. We are
-                # requesting the main page (/)
-                try:
-                    conn.request("GET", request)
-                except ConnectionRefusedError:
-                    print("ERROR! Cannot connect to the Server")
-                    exit()
+                    # Read the response message from the server
+                    response = conn.getresponse()
 
-                # Read the response message from the server
-                response = conn.getresponse()
+                    # Read the response's body
+                    body = response.read().decode()
 
-                # Read the response's body
-                body = response.read().decode()
+                    # We create blank list where we will store the data received from JSON
+                    limit_list = []
 
-                # We create blank list where we will store the data received from JSON
-                limit_list = []
+                    # Create a variable with the data, form the JSON received. We get the key that interest us, species.
+                    body = json.loads(body)
+                    species = body["species"]
 
-                # Create a variable with the data, form the JSON received. We get the key that interest us, species.
-                body = json.loads(body)
-                species = body["species"]
+                    # First we compare if our input of limit is higher than the available numbre of species. On that
+                    # case we will be taken to an error page
 
-                # First we compare if our input of limit is higher than the available numbre of species. On that case
-                # we will be taken to an error page
+                    if limit_value > len(species):
+                        contents = f"""<!DOCTYPE html>
+                                <html lang = "en">
+                                <head>
+                                 <meta charset = "utf-8" >
+                                 <title>ERROR</title >
+                                </head>
+                                <body>
+                                <p>ERROR LIMIT OUT OF RANGE. Introduce a valid limit value</p>
+                                <a href="/">Main page</a></body></html>"""
 
-                if limit_value > len(species):
-                    contents = f"""<!DOCTYPE html>
-                            <html lang = "en">
-                            <head>
-                             <meta charset = "utf-8" >
-                             <title>ERROR</title >
-                            </head>
-                            <body>
-                            <p>ERROR LIMIT OUT OF RANGE. Introduce a valid limit value</p>
-                            <a href="/">Main page</a></body></html>"""
+                    # In case our input is valid, we iterate through all the species and get the key we are looking for,
+                    # their names, which appears as display_name. We will introduce them to our blank list; once its
+                    # lengthis equal to the limit value we introduce we stop iterating and get the  final list of
+                    # species
 
-                # In case our input is valid, we iterate through all the species and get the key we are looking for,
-                # their names, which appears as display_name. We will introduce them to our blank list; once its length
-                # is equal to the limit value we introduce we stop iterating and get the  final list of species
+                    else:
+                        for element in species:
+                            limit_list.append(element["display_name"])
+                            if len(limit_list) == limit_value:
+                                contents += f"""<p>The species are: </p>"""
+                                for specie in limit_list:
+                                    contents += f"""<p> - {specie} </p>"""
+                        contents += f"""<a href="/">Main page</a></body></html>"""
+                        code = 200
 
-                else:
-                    for element in species:
-                        limit_list.append(element["display_name"])
-                        if len(limit_list) == limit_value:
-                            contents += f"""<p>The species are: </p>"""
-                            for specie in limit_list:
-                                contents += f"""<p> - {specie} </p>"""
-                    contents += f"""<a href="/">Main page</a></body></html>"""
-                    code = 200
-
-                    # We just add the final info to our html to be given us back, if we got here everything has
-                    # gone correctly
+                        # We just add the final info to our html to be given us back, if we got here everything has
+                        # gone correctly
 
             # In this option we are asked to introduce the name of a specie of the ensembl data base, the program should
             # give us back a list of the chromosomes of that specie
@@ -171,8 +174,10 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 specie_input = get_value.split('?')
 
                 # We have the couple of elements, split by = and get them separated, the value that will be used is
-                # specie name
-                specie_action, name_sp = specie_input[0].split("=")
+                # specie name. We introduce a change so if we write an specie compose by two names we
+                # will also get its info
+                specie_action, name = specie_input[0].split("=")
+                name_sp = name.replace("+", "%20")
 
                 # We set the main elements that will be used to get the list: ensembl server, endpoint that was
                 # previously searched for this function and parameters
@@ -180,6 +185,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 endpoint = 'info/assembly/'
                 parameters = '?content-type=application/json'
                 request = endpoint + name_sp + parameters
+
 
                 # Connect with the server
                 conn = http.client.HTTPConnection(server)
@@ -201,15 +207,26 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 # Create a variable with the data, form the JSON received. We get the key that interest us, karyotype.
                 body = json.loads(body)
                 karyotype_data = body["karyotype"]
+                if len(karyotype_data) == 0:
+                    contents = f"""<!DOCTYPE html>
+                <html lang = "en">
+                <head>
+                <meta charset = "utf-8">
+                <title> Karyotype </title >
+                </head >
+                <body>
+                <h2>It seems that the karyotype of {name.replace("+"," ")} is not available in ensembl database </h2>
+                <a href="/">Main page </a></body></html>"""
+                    code = 200
+                else:
+                    # This key has associated a list with the different chromosomes, we just get them and add to our html
+                    for chromosome in karyotype_data:
+                        contents += f"""<p> - {chromosome} </p>"""
 
-                # This key has associated a list with the different chromosomes, we just get them and add to our html
-                for chromosome in karyotype_data:
-                    contents += f"""<p> - {chromosome} </p>"""
-
-                # We just add an option to return to the index and our html is now completed,if we got here
-                # everything has gone correctly
-                contents += f"""<a href="/">Main page </a></body></html>"""
-                code = 200
+                    # We just add an option to return to the index and our html is now completed,if we got here
+                    # everything has gone correctly
+                    contents += f"""<a href="/">Main page </a></body></html>"""
+                    code = 200
 
             # In this option we are asked to introduce the name of a specie of the ensembl data base and the name of one
             # of its chromosomes, the program should give us back the length of the chromosome
@@ -222,10 +239,11 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 pairs = pair.split('&')
 
                 # We have two couple of elements, split each by =. The values that will be used are specie and
-                # chromosome that we introduced
-                specie_name, specie = pairs[0].split("=")
+                # chromosome that we introduced.  We introduce a change so if we write an specie compose by two names we
+                # will also get its info
+                specie_name, name = pairs[0].split("=")
                 chromosome_index, chromosome = pairs[1].split("=")
-                specie = specie
+                specie = name.replace("+", "%20")
 
                 # We set the main elements that will be used to get the list: ensembl server, endpoint that was
                 # previously searched for this function and parameters
@@ -275,7 +293,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                             <h2> Chromosome length</h2>
                             <meta charset = "utf-8" >
                             <title> Chromosome length </title >
-                            <p>The lenght of the chromosome {chromosome} from {specie} is : </p>
+                            <p>The lenght of the chromosome {chromosome} from {specie.replace("%20", " ")} is : </p>
                             <p> {length}</p>
                             <a href="/">Main page</a></body></html>"""
                             code = 200
