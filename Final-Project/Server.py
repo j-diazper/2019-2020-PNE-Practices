@@ -177,7 +177,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 # specie name. We introduce a change so if we write an specie compose by two names we
                 # will also get its info
                 specie_action, name = specie_input[0].split("=")
-                name_sp = name.replace("+", "%20")
+                name_sp = name.replace("+", "_")
 
                 # We set the main elements that will be used to get the list: ensembl server, endpoint that was
                 # previously searched for this function and parameters
@@ -185,7 +185,6 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 endpoint = 'info/assembly/'
                 parameters = '?content-type=application/json'
                 request = endpoint + name_sp + parameters
-
 
                 # Connect with the server
                 conn = http.client.HTTPConnection(server)
@@ -215,7 +214,8 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 <title> Karyotype </title >
                 </head >
                 <body>
-                <h2>It seems that the karyotype of {name.replace("+"," ")} is not available in ensembl database </h2>
+                <h2> Ups...</h2>
+                <p> It seems that the karyotype of {name.replace("+"," ")} is not available in ensembl database <p>
                 <a href="/">Main page </a></body></html>"""
                     code = 200
                 else:
