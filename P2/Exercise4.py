@@ -1,5 +1,5 @@
 from Client0 import Client
-import termcolor
+from termcolor import colored
 PRACTICE = 2
 EXERCISE = 4
 
@@ -15,7 +15,8 @@ c = Client(IP, PORT)
 print("Sending a message to the server...")
 response1 = "Message 1:..."
 response2= "Message 2: Testing!!!"
-response_list=[response1,response2]
+response_list = [response1, response2]
 for i in response_list:
-    print("To server: ",response1,"\n","From server: ",c.debug_talk(i))
+    print("To server: ", response1, "\n", "From server: ", colored(c.debug_talk(i), "blue"))
+
 

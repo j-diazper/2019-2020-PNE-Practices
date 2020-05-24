@@ -1,5 +1,5 @@
 import socket
-
+from termcolor import colored
 class Client:
     def __init__(self, IP, PORT):
         self.IP = IP
@@ -19,9 +19,9 @@ class Client:
     def debug_talk(self, msg):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.connect((self.IP, self.PORT))
-        msg = (msg, "green")
+        msg = colored(msg, "green")
         s.send(str.encode(msg))
         resp = s.recv(2048).decode("utf-8")
-        response =(resp, "green")
+        response = colored(resp, "green")
         s.close()
         return response
