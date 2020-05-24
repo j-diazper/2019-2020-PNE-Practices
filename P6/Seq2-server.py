@@ -2,7 +2,7 @@ import http.server
 import socketserver
 from pathlib import Path
 from Seq1 import Seq
-
+import termcolor
 # Port
 PORT = 8080
 
@@ -24,7 +24,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
         """This method
         is called whenever the client invokes the GET method
         in the HTTP protocol request"""
-        print(self.requestline)
+        termcolor.cprint(self.requestline, "green")
 
         # We get the first request line and then the path, goes after /. We get the arguments that go after the ? symbol
         req_line = self.requestline.split(' ')

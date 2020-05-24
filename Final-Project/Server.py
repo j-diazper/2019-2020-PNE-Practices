@@ -69,7 +69,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                  <title>List of species in the browser</title >
                 </head >
                 <body>
-                <p>The total number of species in ensembl is: 267</p>"""
+                <p>The total number of species in ensembl is: 286</p>"""
 
                 # We get the arguments that go after the ? in the path, Limit = "whatever input we introduce"
                 get_value = arguments[1]
@@ -83,7 +83,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 # We try to convert it into an integer to return error page if there is a value error. Also if we leave
                 # it in blank we should get the full list
                 if limit_value == "":
-                    limit_value = "267"
+                    limit_value = "286"
                 limit_value = int(limit_value)
                 if limit_value <= 0:
                     contents = Path('error.html').read_text()
@@ -219,7 +219,9 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 <a href="/">Main page </a></body></html>"""
                     code = 200
                 else:
-                    # This key has associated a list with the different chromosomes, we just get them and add to our html
+
+                    # This key has associated a list with the different chromosomes, we just get them and add to our
+                    # html
                     for chromosome in karyotype_data:
                         contents += f"""<p> - {chromosome} </p>"""
 

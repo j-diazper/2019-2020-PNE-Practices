@@ -1,5 +1,6 @@
 import http.client
 import json
+from termcolor import colored
 
 server = 'rest.ensembl.org'
 endpoint = '/sequence/id/'
@@ -34,8 +35,8 @@ body = response.read().decode()
 # We create the dict with the gene info
 gene = json.loads(body)
 print("Gene", end="")
-print(":", name)
+print(":", colored(name, "green"))
 print("Description", end="")
-print(":", gene['desc'])
+print(":", colored(gene['desc'], "green"))
 print("Bases", end="")
-print(":", gene['seq'])
+print(":", colored(gene['seq'], "green"))

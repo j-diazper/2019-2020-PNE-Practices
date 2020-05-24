@@ -38,7 +38,7 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
             error_code = 200
         else:
             # Read the file
-            contents = Path('Error.html').read_text()
+            contents = Path('error.html').read_text()
             content_type = 'text/html'
             error_code = 404
 

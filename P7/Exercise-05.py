@@ -1,7 +1,7 @@
 import http.client
 import json
 from Seq1 import Seq
-
+from termcolor import colored
 
 gene_list = {'FRAT1': 'ENSG00000165879', 'ADA': 'ENSG00000196839', 'FXN': 'ENSG00000165060', 'RNU6_269P': 'ENSG00000212379',
 'MIR633': 'ENSG00000207552', 'TTTY4C': 'ENSG00000228296', 'RBMY2YP': 'ENSG00000227633', 'FGFR3': 'ENSG00000068078',
@@ -48,9 +48,9 @@ for name in gene_list:
     gene = json.loads(body)
 
     print("Gene", end="")
-    print(":", name)
+    print(":", colored(name, "green"))
     print("Description", end="")
-    print(":", gene['desc'])
+    print(":", colored(gene['desc'], "green"))
 
     body = gene['seq']
 
@@ -68,16 +68,16 @@ for name in gene_list:
     perc_t = 100 * counter_t / length
 
     print("Total lengh", end="")
-    print(":", length)
+    print(":", colored(length, "green"))
 
     print("A", end="")
-    print(":", counter_a, perc_a, "%")
+    print(":", colored(counter_a, "green"), colored(perc_a, "blue"), "%")
     print("C", end="")
-    print(":", counter_c, perc_c, "%")
+    print(":", colored(counter_c, "green"), colored(perc_c, "blue"), "%")
     print("G", end="")
-    print(":", counter_g, perc_g, "%")
+    print(":", colored(counter_g, "green"), colored(perc_g, "blue"), "%")
     print("T", end="")
-    print(":", counter_t, perc_t, "%")
+    print(":", colored(counter_t, "green"), colored(perc_t, "blue"), "%")
 
     # -- Dictionary with the values
     dic = seq.count(base_list)
@@ -90,4 +90,4 @@ for name in gene_list:
 
     # -- Print the base
     print("Most frequent Base", end="")
-    print(f": {base_list[value_list.index(maximum)]}")
+    print(": ", colored(base_list[value_list.index(maximum)], "green"))
