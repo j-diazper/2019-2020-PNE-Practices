@@ -1,7 +1,7 @@
 import socket
 from Seq1 import Seq
 from termcolor import colored
-#IP and PORT
+# IP and PORT
 IP = "127.0.0.1"
 PORT = 8080
 
@@ -19,12 +19,18 @@ EXT = ".txt"
 GENES = ["U5", "ADA", "FRAT1", "FXN", "RNU6_269P"]
 
 # GET option returns a sequence associated with the number introduced
+
+
 def GET(SEQ_Index):
     return SEQ_LIST[SEQ_Index]
 
 # INFO option returns the info associated with a sequence
+
+
 def INFO(SEQ):
-    # First convert the string into an object Seq, the using th class functions calculate the info with count_base and len
+
+    # First convert the string into an object Seq, the using th class functions calculate the info with count_base and
+    # len
     s = Seq(SEQ)
     length = s.len()
     counter_A = s.count_base('A')
@@ -39,8 +45,11 @@ def INFO(SEQ):
     return INFO
 
 # COMP option returns the complementary sequence of a sequence introduced previously
+
+
 def COMP(SEQ):
-    #First convert the string into an object Seq, then using the class function complement we return the complentary seq
+
+    # First convert the string into an object Seq then using the class function complement we return the complentary seq
     s = Seq(SEQ)
     return s.complement()
 
@@ -97,7 +106,7 @@ while True:
         lcmds = line0.split(' ')
 
         # -- The first element is the command
-        comand= lcmds[0]
+        comand = lcmds[0]
 
         # -- Get the first argument
         try:

@@ -22,28 +22,27 @@ EXERCISE = 7
 print(f"-----| Practice {PRACTICE}, Exercise {EXERCISE} |------")
 
 # -- Parameters of the server to talk to
-IP = "212.128.253.170"
+IP = "192.168.1.213"
 PORT1 = 8080
-PORT2=8089
-PORT_list=[]
+PORT2 = 8089
+PORT_list = []
 PORT_list.append(PORT1)
 PORT_list.append(PORT2)
 # -- Create a client object
 c1 = Client(IP, PORT1)
-c2= Client(IP,PORT2)
+c2 = Client(IP,PORT2)
 
-#Reading text
+# Reading text
 
 FILENAME = "FRAT1.txt"
-#Even and odd lists
-EVEN_list=[]
-ODD_list= []
+# Even and odd lists
+EVEN_list = []
+ODD_list = []
 for i in dividing_seq(FILENAME)[1]:
-    if dividing_seq(FILENAME)[1].index(i)%2==0:
+    if dividing_seq(FILENAME)[1].index(i) % 2 == 0:
         EVEN_list.append(i)
     else:
         ODD_list.append(i)
-
 
 
 # -- Send a message to the server
@@ -52,10 +51,10 @@ response = "NULL Seq created"
 print("From server: ", c1.debug_talk(response))
 print("From server: ", c2.debug_talk(response))
 for i in EVEN_list:
-    print("From server: ",c1.debug_talk(i))
-    if EVEN_list.index(i)==4:
+    print("From server: ", c1.debug_talk(i))
+    if EVEN_list.index(i) == 4:
         break
 for i in ODD_list:
-    print("From server: ",c2.debug_talk(i))
-    if ODD_list.index(i)==4:
+    print("From server: ", c2.debug_talk(i))
+    if ODD_list.index(i) == 4:
         break

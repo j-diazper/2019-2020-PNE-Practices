@@ -5,5 +5,5 @@ FILENAME = FOLDER + FILE
 baselist = ["A", "C", "G", "T"]
 s = Seq()
 s1 = Seq(s.read_fasta(FILENAME))
-print("Sequence: (Length: ", s1.len(),": ",s1,"\n"," Bases: ",s1.count(baselist[0]),"\n","Rev: ",s1.reverse(),"\n","Comp: ",s1.complement())
+print("Sequence: (Length: ", s1.len(), ": ", s1, "\n", " Bases: ", s1.count(baselist[0]), "\n","Rev: ", s1.reverse(), "\n", "Comp: ", s1.complement())
 

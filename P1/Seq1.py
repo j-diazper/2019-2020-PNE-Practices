@@ -4,12 +4,12 @@ from pathlib import Path
 class Seq:
     """"A  class for representing seq object"""
     def __init__(self, strbases=None):
-        can_continue= ""
-        gen_list=["A", "C", "G", "T"]
+        can_continue = ""
+        gen_list = ["A", "C", "G", "T"]
         self.strbases= strbases
         if strbases == None:
             print("NULL Seq created")
-            self.strbases="NULL"
+            self.strbases = "NULL"
         else:
             for i in strbases:
                 if i not in gen_list:
@@ -22,10 +22,12 @@ class Seq:
             elif can_continue=="False":
                 print("Invalid sequence")
                 self.strbases = "ERROR"
+
     def __str__(self):
         return self.strbases
+
     def len(self):
-        if self.strbases=="NULL" or self.strbases=="ERROR":
+        if self.strbases == "NULL" or self.strbases == "ERROR":
             return 0
         else:
             return len(self.strbases)
@@ -78,6 +80,7 @@ class Seq:
                 value_list.append(counter_T)
                 dict_1 = dict(zip(list_of_bases, value_list))
                 return dict_1
+
     def reverse(self):
         if self.strbases == "NULL" or self.strbases == "ERROR":
             return self.strbases

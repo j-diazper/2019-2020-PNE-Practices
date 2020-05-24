@@ -15,4 +15,4 @@ seq_list = [s1, s2, s3]
 for i in seq_list:
         print("Sequence",(seq_list.index(i) + 1), ": (Length: ", i.len(), ")", i)
         for base in baselist:
-            print(base,":",i.count_base(base))
+            print(base, ":", i.count_base(base))
