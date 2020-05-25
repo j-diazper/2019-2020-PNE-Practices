@@ -580,8 +580,8 @@ class TestHandler(http.server.BaseHTTPRequestHandler):
                 chromosome_name, chromosome = pairs[0].split("=")
                 chromosome_start, start = pairs[1].split("=")
                 chromosome_end, end = pairs[2].split("=")
-
-                # Just in case we leave start at blank, i will start from 0
+                chromosome = chromosome.capitalize()
+                # Just in case we leave start at blank, it will start from 0
                 if start == "":
                     start = "0"
 

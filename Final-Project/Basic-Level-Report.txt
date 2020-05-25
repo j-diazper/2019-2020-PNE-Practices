@@ -1,5 +1,63 @@
 Basic Level Report
 ====================
+Initial page menu:
+
+* Input:
+
+http://localhost:8080/
+
+* Output:
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>MAIN PAGE - INITIAL</title>
+  </head>
+  <body>
+    <h1>BROWSING HUMAN AND VERTEBRATES GENOME</h1>
+    <p>BASIC LEVEL SERVICES</p>
+    <hr>
+    <form action="listSpecies" method="get">
+      1)List of species in the genome database
+      <br>
+      Limit:
+      <input type="text" name="Limit">
+      <br>
+      <br>
+      <input type="submit" value="SEND">
+    <br>
+    </form>
+    <hr>
+    <form action="karyotype" method="get">
+      2) Information about the karyotype
+      <br>
+      Select the specie:
+      <input type="text" name="Specie">
+      <br>
+          <br>
+      <input type="submit" value="SEND">
+    <br>
+    </form>
+    <hr>
+  <form action="chromosomeLength" method="get">
+      3) Chromosome length
+      <br>
+      Select the specie:
+      <input type="text" name="Specie">
+      <br>
+      Select the chromosome:
+      <input type="text" name="Chromosome">
+      <br>
+      <br>
+      <input type="submit" value="SEND">
+      <br>
+    </form>
+    <hr>
+  </body>
+</html>
+------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
 
 ---> listSpecies endpoint
 
